@@ -1,0 +1,6 @@
+{
+  "name": "SOUBAICAR - Location de Voitures Laâyoune, Boujdour, Dakhla",
+  "description": "Plateforme officielle de location de voitures SOUBAICAR au Maroc. Flotte moderne à Laâyoune, Boujdour et Dakhla. Kilométrage illimité et réservation directe.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

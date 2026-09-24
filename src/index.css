@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-navy: #263B86;
+    --brand-dark-navy: #15265A;
+    --brand-red: #D92D3A;
+    --brand-light-gray: #F6F7FA;
+    --brand-dark-text: #1C2434;
+    --brand-neutral-gray: #667085;
+    --brand-whatsapp: #25D366;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  [dir="rtl"], [dir="rtl"] body {
+    font-family: 'Cairo', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom scrollbar and accessibility adjustments */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Tabular figures for pricing and stats */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
