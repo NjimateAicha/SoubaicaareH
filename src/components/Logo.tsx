@@ -1,4 +1,5 @@
 import React from 'react';
+import logoUrl from '../public/logo.png';
 
 interface LogoProps {
   variant?: 'light' | 'dark';
@@ -11,14 +12,14 @@ export const Logo: React.FC<LogoProps> = ({ variant = 'light', className = '', s
 
   return (
     <div className={`flex items-center gap-2.5 select-none ${className}`}>
-      {/* SOUBAICAR / LVS Brand Emblem */}
-      <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-[#263B86] shadow-sm border border-white/15 overflow-hidden shrink-0">
-        {/* Dynamic automotive red accent line */}
-        <div className="absolute top-0 right-0 w-3 h-3 bg-[#D92D3A] rounded-bl-lg" />
-        <div className="flex flex-col items-center justify-center font-bold leading-none tracking-tighter">
-          <span className="text-[11px] font-black text-white">LVS</span>
-          <span className="text-[8px] font-semibold text-[#D92D3A] tracking-wider">CAR</span>
-        </div>
+      <div className={`flex items-center justify-center w-12 h-12 shrink-0 ${isDark ? 'rounded-lg bg-white p-1' : ''}`}>
+        <img
+          src={logoUrl}
+          alt="LVS"
+          width={512}
+          height={512}
+          className="block w-full h-full object-contain"
+        />
       </div>
 
       {/* Wordmark */}
