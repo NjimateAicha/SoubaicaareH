@@ -10,6 +10,8 @@ import {
   LogOut,
   ExternalLink,
   X,
+  Building2,
+  Mail,
 } from 'lucide-react';
 import { Logo } from '../Logo';
 
@@ -17,7 +19,8 @@ export type AdminSection =
   | 'dashboard'
   | 'vehicles'
   | 'reservations'
-  | 'locations'
+  | 'corporateQuotes'
+  | 'messages'
   | 'testimonials'
   | 'content'
   | 'settings';
@@ -26,6 +29,8 @@ interface AdminSidebarProps {
   currentSection: AdminSection;
   onSelectSection: (section: AdminSection) => void;
   newReservationsCount: number;
+  newCorporateQuotesCount: number;
+  newMessagesCount: number;
   totalVehiclesCount: number;
   isOpenMobile: boolean;
   onCloseMobile: () => void;
@@ -37,6 +42,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   currentSection,
   onSelectSection,
   newReservationsCount,
+  newCorporateQuotesCount,
+  newMessagesCount,
   totalVehiclesCount,
   isOpenMobile,
   onCloseMobile,
@@ -62,9 +69,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       badge: newReservationsCount > 0 ? `${newReservationsCount}` : undefined,
     },
     {
-      id: 'locations' as AdminSection,
-      label: 'Agences',
-      icon: MapPin,
+      id: 'corporateQuotes' as AdminSection,
+      label: 'Demandes entreprises',
+      icon: Building2,
+      badge: newCorporateQuotesCount > 0 ? `${newCorporateQuotesCount}` : undefined,
+    },
+    {
+      id: 'messages' as AdminSection,
+      label: 'Messages',
+      icon: Mail,
+      badge: newMessagesCount > 0 ? `${newMessagesCount}` : undefined,
     },
     {
       id: 'testimonials' as AdminSection,

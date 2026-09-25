@@ -115,7 +115,7 @@ export const AdminSettingsView: React.FC<AdminSettingsViewProps> = ({
               className="w-full bg-[#F6F7FA] border border-slate-200 text-xs font-semibold rounded-xl p-2.5 text-[#15265A]"
             />
             <p className="text-[10px] text-slate-400 mt-1">
-              Exemple : +212 661 140 000 (utilisé pour les messages automatiques pré-remplis)
+              Exemple : +212 662 104 425 (utilisé pour les messages automatiques pré-remplis)
             </p>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, MessageCircle, Clock, Send, CheckCircle2 } from 'lucide-react';
+import { MapPin, Phone, Mail, MessageCircle, Send, CheckCircle2, ExternalLink, Navigation } from 'lucide-react';
 import type { Language, LocationItem } from '../types/database';
 import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
+import { DataService } from '../lib/supabase';
 
 interface ContactPageProps {
   currentLang: Language;
@@ -27,14 +28,40 @@ export const ContactPage: React.FC<ContactPageProps> = ({
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !userPhone || !message) return;
-    setSent(true);
+
+    setSubmitting(true);
+    setErrorMessage('');
+    try {
+      await DataService.createContactMessage({
+        name,
+        phone: userPhone,
+        email: userEmail,
+        subject,
+        message,
+        language: currentLang,
+      });
+      setSent(true);
+    } catch (err) {
+      console.error('Contact message error:', err);
+      setErrorMessage(
+        currentLang === 'ar'
+          ? 'تعذر إرسال الرسالة. يرجى التحقق من اتصالك أو إعادة المحاولة لاحقًا.'
+          : 'Le message n’a pas pu être envoyé. Vérifiez votre connexion ou réessayez plus tard.'
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const whatsappHref = buildWhatsAppLink(whatsapp, '', '', '', '', currentLang);
+  const mainMapUrl = locations.find((l) => l.map_url)?.map_url;
+  const mainMapEmbedUrl = 'https://www.google.com/maps?q=27.149924,-13.200756&z=15&output=embed';
 
   return (
     <div className="min-h-screen bg-[#F6F7FA] py-12">
@@ -52,62 +79,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({
               ? 'فريقنا متواجد على مدار الساعة في العيون، بوجدور والداخلة للإجابة عن استفساراتكم وتأكيد حجوزاتكم.'
               : 'Notre équipe locale est à votre écoute pour toute demande d’information, devis d’entreprise ou assistance.'}
           </p>
-        </div>
-
-        {/* Agency Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-          {locations.map((loc) => {
-            const locWhatsapp = buildWhatsAppLink(loc.whatsapp, '', loc.name, '', '', currentLang);
-            return (
-              <div key={loc.id} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-bold text-[#D92D3A] uppercase tracking-wider">
-                      SOUBAICAR
-                    </span>
-                    <span className="text-[11px] bg-blue-50 text-[#263B86] font-semibold px-2 py-0.5 rounded">
-                      7j/7
-                    </span>
-                  </div>
-                  <h3 className="text-xl font-bold text-[#15265A] mb-3">
-                    {loc.name}
-                  </h3>
-                  <div className="space-y-2.5 text-xs text-[#1C2434] mb-6">
-                    <div className="flex items-start gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-[#D92D3A] shrink-0 mt-0.5" />
-                      <span>{loc.address}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-[#263B86] shrink-0" />
-                      <span className="font-semibold tabular-nums">{loc.phone}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 text-[#263B86] shrink-0" />
-                      <span>08:00 - 22:00</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 pt-4 border-t border-slate-100">
-                  <a
-                    href={`tel:${loc.phone.replace(/[^0-9+]/g, '')}`}
-                    className="flex-1 py-2 text-center text-xs font-bold bg-slate-100 hover:bg-slate-200 text-[#15265A] rounded-lg transition-colors"
-                  >
-                    {currentLang === 'ar' ? 'اتصال' : 'Appeler'}
-                  </a>
-                  <a
-                    href={locWhatsapp}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 bg-[#25D366] text-white rounded-lg hover:bg-emerald-600 transition-colors"
-                    title="WhatsApp"
-                  >
-                    <MessageCircle className="w-4 h-4 fill-current" />
-                  </a>
-                </div>
-              </div>
-            );
-          })}
         </div>
 
         {/* Interactive Form & Fast WhatsApp Support */}
@@ -136,6 +107,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {errorMessage && (
+                  <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700">
+                    {errorMessage}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-[#15265A] uppercase tracking-wider mb-1.5">
@@ -146,7 +122,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
-                      placeholder="Ex: Omar Alami"
                       className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] text-xs font-medium rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                     />
                   </div>
@@ -159,9 +134,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                       value={userPhone}
                       onChange={(e) => setUserPhone(e.target.value)}
                       required
-                      placeholder="+212 600 000 000"
                       className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] text-xs font-medium rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                     />
+                    <p className="text-[10px] text-slate-400 mt-1">
+                      {currentLang === 'ar' ? 'مثال: 600 000 000 212+' : 'Format : +212 6XX XXX XXX'}
+                    </p>
                   </div>
                 </div>
 
@@ -174,7 +151,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                       type="email"
                       value={userEmail}
                       onChange={(e) => setUserEmail(e.target.value)}
-                      placeholder="nom@exemple.com"
                       className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] text-xs font-medium rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                     />
                   </div>
@@ -186,7 +162,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                       type="text"
                       value={subject}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Demande d'information / Devis"
                       className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] text-xs font-medium rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                     />
                   </div>
@@ -200,22 +175,26 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                     rows={4}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    required
-                    placeholder={
-                      currentLang === 'ar'
-                        ? 'اكتب رسالتك أو استفسارك هنا...'
-                        : 'Précisez votre demande, dates souhaitées ou questions...'
-                    }
+                   
                     className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] text-xs font-medium rounded-xl p-3 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-3 bg-[#D92D3A] hover:bg-[#b8222e] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={submitting}
+                  className="w-full sm:w-auto px-8 py-3 bg-[#D92D3A] hover:bg-[#b8222e] disabled:opacity-60 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
-                  <span>{currentLang === 'ar' ? 'إرسال الرسالة' : 'Envoyer mon message'}</span>
+                  <span>
+                    {submitting
+                      ? currentLang === 'ar'
+                        ? 'جاري الإرسال...'
+                        : 'Envoi en cours...'
+                      : currentLang === 'ar'
+                      ? 'إرسال الرسالة'
+                      : 'Envoyer mon message'}
+                  </span>
                 </button>
               </form>
             )}
@@ -229,8 +208,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
                 {currentLang === 'ar'
-                  ? 'تواصل معنا مباشرة عبر تطبيق واتساب للحصول على تأكيد فوري لتوافر السيارات والأسعار.'
-                  : 'Contactez notre permanence WhatsApp pour vérifier en direct les disponibilités de véhicules et obtenir votre réservation instantanément.'}
+                  ? 'تواصل معنا مباشرة عبر واتساب للحصول على دعم سريع بشأن الحجز أو المواعيد أو الاستفسارات.'
+                  : 'Contactez-nous directement par WhatsApp pour un échange rapide sur votre demande, votre réservation ou votre besoin de location.'}
               </p>
 
               <a
@@ -240,29 +219,83 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                 className="w-full py-3.5 px-6 bg-[#25D366] hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-5 h-5 fill-current" />
-                <span>{currentLang === 'ar' ? 'محادثة واتساب فورية' : 'Ouvrir WhatsApp (+212 661 140 000)'}</span>
+                <span>{currentLang === 'ar' ? 'محادثة واتساب فورية' : `WhatsApp (${whatsapp})`}</span>
               </a>
             </div>
 
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4 text-xs sm:text-sm text-[#1C2434]">
               <h4 className="font-bold text-base text-[#15265A]">
-                {currentLang === 'ar' ? 'المركز الرئيسي لخدمة العملاء' : 'Centrale de réservation SOUBAICAR'}
+                {currentLang === 'ar' ? 'معلومات الاتصال' : 'Coordonnées principales'}
               </h4>
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#D92D3A]" />
-                <span className="font-semibold tabular-nums">{phone}</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-[#263B86]" />
-                <span>{email}</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-[#667085]">
-                <Clock className="w-4 h-4 text-[#263B86]" />
-                <span>{currentLang === 'ar' ? 'خدمة يومية من 08:00 إلى 22:00' : 'Permanence continue 7j/7 : 08h00 - 22h00'}</span>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-[#D92D3A]" />
+                  <span className="font-semibold tabular-nums">+212 661 384 118</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-[#D92D3A]" />
+                  <span className="font-semibold tabular-nums">+212 662 104 425</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-[#D92D3A]" />
+                  <span className="font-semibold tabular-nums">+212 662 104 479</span>
+                </div>
+                <div className="flex items-center gap-2.5 break-all">
+                  <Mail className="w-4 h-4 text-[#263B86]" />
+                  <span>{email}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        {mainMapUrl && (
+          <div className="mt-8 bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-6">
+              <div className="w-14 h-14 rounded-2xl bg-[#263B86]/10 text-[#263B86] flex items-center justify-center shrink-0">
+                <MapPin className="w-7 h-7" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-[#15265A] mb-1">
+                  {currentLang === 'ar' ? 'موقعنا على الخريطة' : 'Notre localisation'}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#667085]">
+                  {locations.find((l) => l.map_url)?.address}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href={mainMapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#F6F7FA] hover:bg-slate-100 text-[#15265A] text-xs font-bold rounded-lg transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>{currentLang === 'ar' ? 'فتح في خرائط جوجل' : 'Ouvrir dans Google Maps'}</span>
+                </a>
+                <a
+                  href={mainMapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#15265A] hover:bg-[#263B86] text-white text-xs font-bold rounded-lg transition-colors"
+                >
+                  <Navigation className="w-3.5 h-3.5" />
+                  <span>{currentLang === 'ar' ? 'الحصول على الاتجاهات' : 'Itinéraire'}</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="overflow-hidden rounded-xl border border-slate-200">
+              <iframe
+                title="SOUBAICAR Laâyoune location map"
+                src={mainMapEmbedUrl}
+                className="w-full h-[320px] border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

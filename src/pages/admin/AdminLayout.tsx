@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AdminSidebar, AdminSection } from '../../components/admin/AdminSidebar';
 import { AdminHeader } from '../../components/admin/AdminHeader';
 import { AdminDashboardView } from './AdminDashboardView';
 import { AdminVehiclesView } from './AdminVehiclesView';
 import { AdminReservationsView } from './AdminReservationsView';
-import { AdminAgenciesView } from './AdminAgenciesView';
 import { AdminTestimonialsView } from './AdminTestimonialsView';
 import { AdminContentView } from './AdminContentView';
 import { AdminSettingsView } from './AdminSettingsView';
-import { AdminLoginPage } from './AdminLoginPage';
-import type { Vehicle, LocationItem, Reservation, Testimonial, SiteSettings, ReservationStatus } from '../../types/database';
+import { AdminCorporateQuotesView } from './AdminCorporateQuotesView';
+import { AdminMessagesView } from './AdminMessagesView';
+import type { Vehicle, LocationItem, Reservation, Testimonial, SiteSettings, ReservationStatus, CorporateQuoteRequest, CorporateQuoteStatus, ContactMessage, ContactMessageStatus } from '../../types/database';
 
 interface AdminLayoutProps {
   vehicles: Vehicle[];
@@ -17,79 +17,64 @@ interface AdminLayoutProps {
   reservations: Reservation[];
   testimonials: Testimonial[];
   settings: SiteSettings;
-  onSaveVehicle: (v: Partial<Vehicle>) => void;
+  corporateQuoteRequests: CorporateQuoteRequest[];
+  contactMessages: ContactMessage[];
+  onSaveVehicle: (v: Partial<Vehicle>) => Promise<void>;
   onDeleteVehicle: (id: string) => void;
   onToggleVehicleAvailable: (v: Vehicle) => void;
   onToggleVehicleFeatured: (v: Vehicle) => void;
   onUpdateReservationStatus: (id: string, st: ReservationStatus) => void;
+  onUpdateCorporateQuoteStatus: (id: string, st: CorporateQuoteStatus) => void;
+  onUpdateMessageStatus: (id: string, st: ContactMessageStatus) => void;
   onUpdateLocation: (loc: LocationItem) => void;
   onSaveTestimonial: (t: Partial<Testimonial>) => void;
   onDeleteTestimonial: (id: string) => void;
   onToggleTestimonialPublished: (t: Testimonial) => void;
   onSaveSettings: (s: SiteSettings) => void;
   onNavigatePublic: () => void;
-  initialPath?: string;
+  onLogout: () => void;
 }
 
-export const AdminLayout: React.FC<AdminLayoutProps> = ({
+export const AdminLayout: React.FC<AdminLayoutProps & { initialSection?: AdminSection }> = ({
   vehicles,
   locations,
   reservations,
   testimonials,
   settings,
+  corporateQuoteRequests,
+  contactMessages,
   onSaveVehicle,
   onDeleteVehicle,
   onToggleVehicleAvailable,
   onToggleVehicleFeatured,
   onUpdateReservationStatus,
+  onUpdateCorporateQuoteStatus,
+  onUpdateMessageStatus,
   onUpdateLocation,
   onSaveTestimonial,
   onDeleteTestimonial,
   onToggleTestimonialPublished,
   onSaveSettings,
   onNavigatePublic,
-  initialPath = '/admin',
+  onLogout,
+  initialSection = 'dashboard',
 }) => {
-  // Authentication state (Mock UI demonstration for AI Studio)
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('soubaicar_admin_auth_v1') === 'true';
-    }
-    return true; // default demo ready
-  });
+  const [currentSection, setCurrentSection] = useState<AdminSection>(initialSection);
 
-  const [currentSection, setCurrentSection] = useState<AdminSection>('dashboard');
+  useEffect(() => {
+    setCurrentSection(initialSection);
+  }, [initialSection]);
+
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [selectedReservationModal, setSelectedReservationModal] = useState<Reservation | null>(null);
+  const [selectedCorporateQuoteModal, setSelectedCorporateQuoteModal] = useState<CorporateQuoteRequest | null>(null);
 
   // Flag to jump directly into "Add vehicle" form
   const [isAddingVehicleDirectly, setIsAddingVehicleDirectly] = useState(false);
 
-  const handleLogin = (email: string) => {
-    setIsAuthenticated(true);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('soubaicar_admin_auth_v1', 'true');
-    }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('soubaicar_admin_auth_v1');
-    }
-  };
-
-  // If path is specifically /admin/login or user logged out
-  if (!isAuthenticated || initialPath === '/admin/login') {
-    return (
-      <AdminLoginPage
-        onLogin={handleLogin}
-        onNavigateHome={onNavigatePublic}
-      />
-    );
-  }
-
   const newReservationsCount = reservations.filter((r) => r.status === 'new').length;
+  const newCorporateQuotesCount = corporateQuoteRequests.filter((r) => r.status === 'new').length;
+  const newMessagesCount = contactMessages.filter((m) => m.status === 'new').length;
 
   return (
     <div className="min-h-screen bg-[#F6F7FA] flex text-[#1C2434] antialiased">
@@ -101,11 +86,13 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           setIsAddingVehicleDirectly(false);
         }}
         newReservationsCount={newReservationsCount}
+        newCorporateQuotesCount={newCorporateQuotesCount}
+        newMessagesCount={newMessagesCount}
         totalVehiclesCount={vehicles.length}
         isOpenMobile={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
         onNavigatePublic={onNavigatePublic}
-        onLogout={handleLogout}
+        onLogout={onLogout}
       />
 
       {/* 2. Main Content Viewport */}
@@ -164,10 +151,19 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             />
           )}
 
-          {currentSection === 'locations' && (
-            <AdminAgenciesView
-              locations={locations}
-              onUpdateLocation={onUpdateLocation}
+          {currentSection === 'corporateQuotes' && (
+            <AdminCorporateQuotesView
+              corporateQuoteRequests={corporateQuoteRequests}
+              onUpdateStatus={onUpdateCorporateQuoteStatus}
+              selectedRequestModal={selectedCorporateQuoteModal}
+              onSelectRequestModal={setSelectedCorporateQuoteModal}
+            />
+          )}
+
+          {currentSection === 'messages' && (
+            <AdminMessagesView
+              messages={contactMessages}
+              onUpdateStatus={onUpdateMessageStatus}
             />
           )}
 

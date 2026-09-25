@@ -30,9 +30,13 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
       title: 'Demandes de réservation',
       subtitle: 'Suivi des dossiers, relances clients WhatsApp et confirmations de location',
     },
-    locations: {
-      title: 'Agences SOUBAICAR',
-      subtitle: 'Points de retrait et agences à Laâyoune, Boujdour et Dakhla',
+    corporateQuotes: {
+      title: 'Demandes entreprises',
+      subtitle: 'Devis de transport du personnel pour les entreprises à Laâyoune, Boujdour et Dakhla',
+    },
+    messages: {
+      title: 'Messages',
+      subtitle: 'Messages reçus via le formulaire de contact public',
     },
     testimonials: {
       title: 'Avis & Témoignages',

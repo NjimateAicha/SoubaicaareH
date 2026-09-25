@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Calendar,
   MapPin,
@@ -16,10 +16,11 @@ import {
 } from 'lucide-react';
 import type { LocationItem, Vehicle, Reservation, Language } from '../types/database';
 import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
-import { DataService } from '../lib/supabase';
+import { DataService, isSupabaseConfigured } from '../lib/supabase';
 
 interface BookingPageProps {
   locations: LocationItem[];
+  locationsLoading?: boolean;
   vehicles: Vehicle[];
   currentLang: Language;
   onNavigate: (path: string) => void;
@@ -32,6 +33,7 @@ interface BookingPageProps {
 
 export const BookingPage: React.FC<BookingPageProps> = ({
   locations,
+  locationsLoading = false,
   vehicles,
   currentLang,
   onNavigate,
@@ -49,8 +51,28 @@ export const BookingPage: React.FC<BookingPageProps> = ({
   const nextWeek = new Date();
   nextWeek.setDate(nextWeek.getDate() + 5);
 
-  const [locationId, setLocationId] = useState(initialCityId || (locations[0]?.id ?? ''));
-  const [vehicleId, setVehicleId] = useState(initialVehicleId || (vehicles[0]?.id ?? ''));
+  const fallbackLocations: LocationItem[] = [
+    { id: 'loc-1', name: 'Laâyoune', slug: 'laayoune', address: '', phone: '', whatsapp: '', email: '', description_fr: '', description_en: '', description_ar: '', image_url: '', active: true, created_at: new Date().toISOString() },
+    { id: 'loc-2', name: 'Boujdour', slug: 'boujdour', address: '', phone: '', whatsapp: '', email: '', description_fr: '', description_en: '', description_ar: '', image_url: '', active: true, created_at: new Date().toISOString() },
+    { id: 'loc-3', name: 'Dakhla', slug: 'dakhla', address: '', phone: '', whatsapp: '', email: '', description_fr: '', description_en: '', description_ar: '', image_url: '', active: true, created_at: new Date().toISOString() },
+  ];
+
+  const bookingLocationNames = ['Laâyoune', 'Boujdour', 'Dakhla'];
+  const baseLocations = (locations.length > 0 ? locations : (isSupabaseConfigured ? [] : fallbackLocations))
+    .filter((loc) => bookingLocationNames.includes(loc.name) || loc.name === 'Laâyoune' || loc.name === 'Boujdour' || loc.name === 'Dakhla');
+  const sortedLocations = [...baseLocations]
+    .filter((loc) => loc.active !== false)
+    .sort((a, b) => {
+      const order = bookingLocationNames;
+      const rankA = order.indexOf(a.name);
+      const rankB = order.indexOf(b.name);
+      return (rankA === -1 ? Number.MAX_SAFE_INTEGER : rankA) - (rankB === -1 ? Number.MAX_SAFE_INTEGER : rankB);
+    });
+
+  const [selectedLocationId, setSelectedLocationId] = useState(
+    initialCityId && sortedLocations.some((loc) => loc.id === initialCityId) ? initialCityId : ''
+  );
+  const [selectedVehicleId, setSelectedVehicleId] = useState(initialVehicleId || '');
   const [pickupDate, setPickupDate] = useState(initialStartDate || tomorrow.toISOString().split('T')[0]);
   const [returnDate, setReturnDate] = useState(initialEndDate || nextWeek.toISOString().split('T')[0]);
 
@@ -62,20 +84,29 @@ export const BookingPage: React.FC<BookingPageProps> = ({
 
   const [submitting, setSubmitting] = useState(false);
   const [submittedReservation, setSubmittedReservation] = useState<Reservation | null>(null);
+  const [locationError, setLocationError] = useState('');
+  const [vehicleError, setVehicleError] = useState('');
+  const [submitError, setSubmitError] = useState('');
 
-  // Sync with prop updates if any
-  useEffect(() => {
-    if (initialCityId) setLocationId(initialCityId);
-    if (initialVehicleId) setVehicleId(initialVehicleId);
-    if (initialStartDate) setPickupDate(initialStartDate);
-    if (initialEndDate) setReturnDate(initialEndDate);
-  }, [initialCityId, initialVehicleId, initialStartDate, initialEndDate]);
-
-  const selectedVehicleObj = vehicles.find((v) => v.id === vehicleId);
-  const selectedLocationObj = locations.find((l) => l.id === locationId);
+  const selectedVehicleObj = vehicles.find((v) => v.id === selectedVehicleId);
+  const selectedLocationObj = sortedLocations.find((loc) => loc.id === selectedLocationId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!selectedLocationId) {
+      setLocationError(currentLang === 'ar' ? 'يرجى اختيار وكالة الاستلام.' : 'Veuillez choisir une agence.');
+      return;
+    }
+
+    if (!selectedVehicleId) {
+      setVehicleError(currentLang === 'ar' ? 'يرجى اختيار السيارة.' : 'Veuillez choisir un véhicule.');
+      return;
+    }
+
+    setLocationError('');
+    setVehicleError('');
+    setSubmitError('');
     if (!fullName || !phone || !pickupDate || !returnDate) return;
 
     setSubmitting(true);
@@ -85,10 +116,10 @@ export const BookingPage: React.FC<BookingPageProps> = ({
         email: email || 'non-fourni@client.com',
         phone,
         country: country || 'Maroc',
-        vehicle_id: vehicleId,
-        vehicle_name: selectedVehicleObj?.name || 'Véhicule',
-        location_id: locationId,
-        location_name: selectedLocationObj?.name || 'Agence',
+        vehicle_id: selectedVehicleId,
+        vehicle_name: selectedVehicleObj?.name || '',
+        location_id: selectedLocationId,
+        location_name: selectedLocationObj?.name || '',
         pickup_date: pickupDate,
         return_date: returnDate,
         message,
@@ -97,7 +128,12 @@ export const BookingPage: React.FC<BookingPageProps> = ({
 
       setSubmittedReservation(res);
     } catch (err) {
-      console.error('Reservation error:', err);
+      console.error('BOOKING_SUBMIT_ERROR', err);
+      setSubmitError(
+        currentLang === 'ar'
+          ? 'تعذر إرسال طلبكم. يرجى المحاولة مرة أخرى.'
+          : 'Impossible d’envoyer votre demande. Veuillez réessayer.'
+      );
     } finally {
       setSubmitting(false);
     }
@@ -233,18 +269,30 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                     <div className="relative">
                       <MapPin className="w-4 h-4 text-[#263B86] absolute top-3.5 start-3 pointer-events-none" />
                       <select
-                        value={locationId}
-                        onChange={(e) => setLocationId(e.target.value)}
-                        className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl py-2.5 ps-9 pe-4 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
+                        value={selectedLocationId}
+                        onChange={(e) => {
+                          setSelectedLocationId(e.target.value);
+                          if (e.target.value) setLocationError('');
+                        }}
+                        disabled={locationsLoading}
+                        className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl py-2.5 ps-9 pe-4 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden disabled:opacity-70 disabled:cursor-not-allowed"
                         required
                       >
-                        {locations.map((loc) => (
+                        <option value="">
+                          {locationsLoading
+                            ? (currentLang === 'ar' ? 'جاري التحميل...' : 'Chargement...')
+                            : (currentLang === 'ar' ? 'اختر وكالة' : 'Choisir une agence')}
+                        </option>
+                        {sortedLocations.map((loc) => (
                           <option key={loc.id} value={loc.id}>
-                            Agence SOUBAICAR {loc.name} {currentLang === 'ar' ? '(المطار والمدينة)' : '(Aéroport & Ville)'}
+                            {loc.name}
                           </option>
                         ))}
                       </select>
                     </div>
+                    {locationError && (
+                      <p className="mt-2 text-xs font-medium text-red-600">{locationError}</p>
+                    )}
                   </div>
 
                   {/* Vehicle */}
@@ -255,11 +303,17 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                     <div className="relative">
                       <Car className="w-4 h-4 text-[#263B86] absolute top-3.5 start-3 pointer-events-none" />
                       <select
-                        value={vehicleId}
-                        onChange={(e) => setVehicleId(e.target.value)}
+                        value={selectedVehicleId}
+                        onChange={(e) => {
+                          setSelectedVehicleId(e.target.value);
+                          if (e.target.value) setVehicleError('');
+                        }}
                         className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl py-2.5 ps-9 pe-4 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                         required
                       >
+                        <option value="">
+                          {currentLang === 'ar' ? 'اختر سيارة' : 'Choisir un véhicule'}
+                        </option>
                         {vehicles.map((v) => (
                           <option key={v.id} value={v.id}>
                             {v.name} ({v.category} - {v.fuel})
@@ -268,6 +322,9 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                         ))}
                       </select>
                     </div>
+                    {vehicleError && (
+                      <p className="mt-2 text-xs font-medium text-red-600">{vehicleError}</p>
+                    )}
                   </div>
                 </div>
 
@@ -329,7 +386,6 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder={t.reservationForm.fullNamePlaceholder}
                         className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl py-2.5 ps-9 pe-4 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                         required
                       />
@@ -347,10 +403,12 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder={t.reservationForm.phonePlaceholder}
                         className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl py-2.5 ps-9 pe-4 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                         required
                       />
+                      <p className="text-[10px] text-slate-400 mt-1 ps-1">
+                        {currentLang === 'ar' ? 'مثال: 600 000 000 212+' : 'Format : +212 6XX XXX XXX'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -367,7 +425,6 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder={t.reservationForm.emailPlaceholder}
                         className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl py-2.5 ps-9 pe-4 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                       />
                     </div>
@@ -384,7 +441,6 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                         type="text"
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
-                        placeholder="Ex: Maroc, France, Espagne..."
                         className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl py-2.5 ps-9 pe-4 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                       />
                     </div>
@@ -400,17 +456,22 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                     rows={3}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder={
-                      currentLang === 'ar'
-                        ? 'أضف رقم الرحلة الجوية، طلب مقعد للأطفال أو أي طلب خاص...'
-                        : 'Précisez votre numéro de vol d’arrivée à Laâyoune ou Dakhla, siège enfant, etc.'
-                    }
                     className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl p-3 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                   />
+                  <p className="text-[10px] text-slate-400 mt-1 ps-1">
+                    {currentLang === 'ar'
+                      ? 'أضف رقم الرحلة الجوية، طلب مقعد للأطفال أو أي طلب خاص.'
+                      : 'Vol d’arrivée, siège enfant ou toute autre demande particulière.'}
+                  </p>
                 </div>
               </div>
 
               {/* Submit & WhatsApp alternatives */}
+              {submitError && (
+                <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs sm:text-sm font-semibold text-red-700">
+                  {submitError}
+                </div>
+              )}
               <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-4">
                 <button
                   type="submit"

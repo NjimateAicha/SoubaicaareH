@@ -44,6 +44,25 @@ export const VehicleDetailPage: React.FC<VehicleDetailPageProps> = ({
       ? vehicle.description_en
       : vehicle.description_fr;
 
+  const isValidVehicleImage = (value: string | null | undefined) =>
+    typeof value === 'string' && value.trim().length > 0 && /^https?:\/\//i.test(value) && !value.startsWith('blob:') && !value.startsWith('data:');
+
+  const galleryImages = React.useMemo(() => {
+    const rawGallery = Array.isArray(vehicle.gallery) ? vehicle.gallery : [];
+    const normalized = rawGallery.filter((url) => isValidVehicleImage(url));
+    const primaryImage = isValidVehicleImage(vehicle.image_url) ? vehicle.image_url : normalized[0] || '';
+    const uniqueImages = [primaryImage, ...normalized]
+      .filter((url, index, array) => url && array.indexOf(url) === index);
+    return uniqueImages.filter(Boolean);
+  }, [vehicle]);
+
+  const primaryImage = galleryImages[0] || '';
+  const [selectedImage, setSelectedImage] = React.useState(primaryImage);
+
+  React.useEffect(() => {
+    setSelectedImage(primaryImage);
+  }, [primaryImage]);
+
   const availableLocations = locations.filter((loc) =>
     vehicle.location_ids?.includes(loc.id)
   );
@@ -73,12 +92,26 @@ export const VehicleDetailPage: React.FC<VehicleDetailPageProps> = ({
           {/* Left Column: Visual Gallery & Overview (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-6">
             <div className="relative aspect-16/10 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-md">
-              <img
-                src={vehicle.image_url}
-                alt={vehicle.name}
-                className="w-full h-full object-cover object-center"
-                referrerPolicy="no-referrer"
-              />
+              {selectedImage || primaryImage ? (
+                <img
+                  src={selectedImage || primaryImage}
+                  alt={vehicle.name}
+                  className="w-full h-full object-cover object-center"
+                  referrerPolicy="no-referrer"
+                  onError={(event) => {
+                    console.error('VEHICLE_IMAGE_RENDER_ERROR', { vehicle: vehicle.name, url: selectedImage || primaryImage });
+                    const target = event.currentTarget as HTMLImageElement;
+                    target.style.display = 'none';
+                    const placeholder = target.parentElement?.lastElementChild as HTMLElement | null;
+                    if (placeholder) placeholder.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div
+                className={`absolute inset-0 flex items-center justify-center text-[11px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 ${selectedImage || primaryImage ? 'hidden' : 'flex'}`}
+              >
+                Image à venir
+              </div>
               <div className="absolute top-4 inset-x-4 flex items-center justify-between">
                 <span className="bg-[#263B86] text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
                   {vehicle.category}
@@ -96,6 +129,40 @@ export const VehicleDetailPage: React.FC<VehicleDetailPageProps> = ({
                 </span>
               </div>
             </div>
+
+            {galleryImages.length > 1 && (
+              <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+                <div className="flex gap-3 overflow-x-auto pb-1">
+                  {galleryImages.map((image, index) => (
+                    <button
+                      key={`${image}-${index}`}
+                      type="button"
+                      onClick={() => setSelectedImage(image)}
+                      className={`relative shrink-0 w-24 h-16 rounded-xl overflow-hidden border-2 transition-all ${
+                        selectedImage === image ? 'border-[#D92D3A]' : 'border-slate-200'
+                      }`}
+                    >
+                      <img
+                        src={image}
+                        alt={`${vehicle.name} ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                        onError={(event) => {
+                          console.error('VEHICLE_IMAGE_RENDER_ERROR', { vehicle: vehicle.name, url: image });
+                          const target = event.currentTarget as HTMLImageElement;
+                          target.style.display = 'none';
+                          const placeholder = target.parentElement?.lastElementChild as HTMLElement | null;
+                          if (placeholder) placeholder.style.display = 'flex';
+                        }}
+                      />
+                      <div className="absolute inset-0 hidden items-center justify-center text-[9px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100">
+                        Image à venir
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Included standard benefits */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">

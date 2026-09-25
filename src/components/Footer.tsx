@@ -1,8 +1,8 @@
 import React from 'react';
 import { Logo } from './Logo';
-import { Phone, Mail, MessageCircle, MapPin, ShieldCheck, Clock, ExternalLink } from 'lucide-react';
+import { Phone, Mail, MessageCircle, MapPin, ShieldCheck, Linkedin, Facebook } from 'lucide-react';
 import type { Language, LocationItem } from '../types/database';
-import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
+import { TRANSLATIONS, buildWhatsAppLink, getStaffTransportPath } from '../lib/translations';
 
 interface FooterProps {
   currentLang: Language;
@@ -67,10 +67,10 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigate(`/${currentLang}/agences`)}
+                  onClick={() => onNavigate(getStaffTransportPath(currentLang))}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  {t.nav.locations}
+                  {t.nav.staffTransport}
                 </button>
               </li>
               <li>
@@ -142,7 +142,7 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           {/* Column 4: Contact & Direct Assistance */}
-          <div>
+          <div className="min-w-0">
             <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-4 border-b border-white/10 pb-2 inline-block">
               {isRtl ? 'تواصل وحجز مباشر' : 'Contact & Réservations'}
             </h4>
@@ -162,14 +162,14 @@ export const Footer: React.FC<FooterProps> = ({
 
               <a
                 href={`mailto:${email}`}
-                className="flex items-center gap-2 hover:text-white transition-colors"
+                className="flex items-center gap-2 hover:text-white transition-colors min-w-0"
               >
                 <div className="w-7 h-7 rounded-md bg-white/10 flex items-center justify-center shrink-0">
                   <Mail className="w-3.5 h-3.5 text-[#D92D3A]" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-[11px] text-slate-400 block">{t.footer.email}</span>
-                  <span className="font-semibold">{email}</span>
+                  <span className="font-semibold break-all">{email}</span>
                 </div>
               </a>
 
@@ -182,40 +182,68 @@ export const Footer: React.FC<FooterProps> = ({
                 <MessageCircle className="w-4 h-4 fill-current" />
                 <span>{isRtl ? 'محادثة واتساب مباشرة' : 'Assistance WhatsApp 24/7'}</span>
               </a>
-
-              <div className="pt-2 flex items-center gap-2 text-xs text-slate-400">
-                <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span>7j/7 : 08h00 - 22h00</span>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar: Languages & Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} {t.footer.rights}</p>
-          <div className="flex items-center gap-3">
-            <span className="text-slate-400">{isRtl ? 'اللغة:' : 'Langue :'}</span>
-            <button
-              onClick={() => onLanguageChange('fr')}
-              className={`hover:text-white transition-colors ${currentLang === 'fr' ? 'text-white font-bold underline' : ''}`}
+        <div className="pt-8 flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-sm text-slate-300">
+              <span className="text-slate-400">{isRtl ? 'تابعونا' : currentLang === 'fr' ? 'Suivez-nous' : 'Follow us'}</span>
+              <a
+                href="https://www.linkedin.com/company/location-de-voitures-soubai/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/15 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-4 h-4 text-white" />
+              </a>
+              <a
+                href="https://www.facebook.com/SOUBAICAR/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/15 transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-4 h-4 text-white" />
+              </a>
+            </div>
+            <a
+              href="https://aichanjimate.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-slate-400 hover:text-white transition-colors"
             >
-              Français
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => onLanguageChange('en')}
-              className={`hover:text-white transition-colors ${currentLang === 'en' ? 'text-white font-bold underline' : ''}`}
-            >
-              English
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => onLanguageChange('ar')}
-              className={`hover:text-white transition-colors ${currentLang === 'ar' ? 'text-white font-bold underline' : ''}`}
-            >
-              العربية
-            </button>
+              {isRtl ? 'تم التطوير بواسطة Aicha Njimate' : currentLang === 'fr' ? 'Développé par Aicha Njimate' : 'Developed by Aicha Njimate'}
+            </a>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 border-t border-white/10 pt-5">
+            <p>© {new Date().getFullYear()} {t.footer.rights}</p>
+            <div className="flex items-center gap-3">
+              <span className="text-slate-400">{isRtl ? 'اللغة:' : 'Langue :'}</span>
+              <button
+                onClick={() => onLanguageChange('fr')}
+                className={`hover:text-white transition-colors ${currentLang === 'fr' ? 'text-white font-bold underline' : ''}`}
+              >
+                Français
+              </button>
+              <span>·</span>
+              <button
+                onClick={() => onLanguageChange('en')}
+                className={`hover:text-white transition-colors ${currentLang === 'en' ? 'text-white font-bold underline' : ''}`}
+              >
+                English
+              </button>
+              <span>·</span>
+              <button
+                onClick={() => onLanguageChange('ar')}
+                className={`hover:text-white transition-colors ${currentLang === 'ar' ? 'text-white font-bold underline' : ''}`}
+              >
+                العربية
+              </button>
+            </div>
           </div>
         </div>
       </div>

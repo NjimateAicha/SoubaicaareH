@@ -1,8 +1,8 @@
 import React from 'react';
-import type { ReservationStatus } from '../../types/database';
+import type { ReservationStatus, CorporateQuoteStatus, ContactMessageStatus } from '../../types/database';
 
 interface StatusBadgeProps {
-  status: ReservationStatus | 'available' | 'unavailable' | 'featured' | 'published' | 'draft';
+  status: ReservationStatus | CorporateQuoteStatus | ContactMessageStatus | 'available' | 'unavailable' | 'featured' | 'published' | 'draft';
   label?: string;
   size?: 'sm' | 'md';
 }
@@ -37,6 +37,48 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label, size = 
         <span className={`inline-flex items-center gap-1 font-medium rounded-md bg-slate-100 text-slate-600 border border-slate-200/80 ${sizeClasses}`}>
           <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
           <span>{label || 'ANNULÉ'}</span>
+        </span>
+      );
+    case 'qualified':
+      return (
+        <span className={`inline-flex items-center gap-1 font-bold rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/80 ${sizeClasses}`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+          <span>{label || 'QUALIFIÉ'}</span>
+        </span>
+      );
+    case 'quoted':
+      return (
+        <span className={`inline-flex items-center gap-1 font-bold rounded-md bg-amber-50 text-amber-700 border border-amber-200/80 ${sizeClasses}`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+          <span>{label || 'DEVIS ENVOYÉ'}</span>
+        </span>
+      );
+    case 'won':
+      return (
+        <span className={`inline-flex items-center gap-1 font-bold rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/80 ${sizeClasses}`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+          <span>{label || 'GAGNÉ'}</span>
+        </span>
+      );
+    case 'lost':
+      return (
+        <span className={`inline-flex items-center gap-1 font-medium rounded-md bg-slate-100 text-slate-600 border border-slate-200/80 ${sizeClasses}`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+          <span>{label || 'PERDU'}</span>
+        </span>
+      );
+    case 'read':
+      return (
+        <span className={`inline-flex items-center gap-1 font-medium rounded-md bg-blue-50 text-[#263B86] border border-blue-200/80 ${sizeClasses}`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#263B86]" />
+          <span>{label || 'LU'}</span>
+        </span>
+      );
+    case 'replied':
+      return (
+        <span className={`inline-flex items-center gap-1 font-bold rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/80 ${sizeClasses}`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+          <span>{label || 'RÉPONDU'}</span>
         </span>
       );
     case 'available':

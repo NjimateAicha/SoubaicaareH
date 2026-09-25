@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
-import { X, Check, Save, ArrowLeft } from 'lucide-react';
+import { Check, Save, ArrowLeft } from 'lucide-react';
 import type { Vehicle, LocationItem, Language } from '../../types/database';
+import { supabase } from '../../lib/supabase';
 import { LanguageTabs } from './LanguageTabs';
 import { ImageUploader } from './ImageUploader';
 
 interface VehicleFormProps {
   initialVehicle?: Partial<Vehicle> | null;
   locations: LocationItem[];
-  onSave: (vehicle: Partial<Vehicle>) => void;
+  onSave: (vehicle: Partial<Vehicle>) => Promise<void> | void;
   onCancel: () => void;
 }
+
+const isValidVehicleImage = (value: string | null | undefined) =>
+  typeof value === 'string' &&
+  value.trim().length > 0 &&
+  /^https?:\/\//i.test(value) &&
+  !value.startsWith('blob:') &&
+  !value.startsWith('data:');
 
 export const VehicleForm: React.FC<VehicleFormProps> = ({
   initialVehicle,
@@ -43,21 +51,20 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
     initialVehicle?.location_ids || locations.map((l) => l.id)
   );
 
-  // Multilingual descriptions
   const [descLang, setDescLang] = useState<Language>('fr');
   const [descFr, setDescFr] = useState(initialVehicle?.description_fr || '');
   const [descEn, setDescEn] = useState(initialVehicle?.description_en || '');
   const [descAr, setDescAr] = useState(initialVehicle?.description_ar || '');
+  const [uploadError, setUploadError] = useState('');
 
-  // Images list
-  const [images, setImages] = useState<string[]>(() => {
-    if (initialVehicle?.image_url) {
-      return [initialVehicle.image_url];
-    }
-    return [];
+  const [existingImages, setExistingImages] = useState<string[]>(() => {
+    const gallery = Array.isArray(initialVehicle?.gallery) ? initialVehicle.gallery : [];
+    const merged = [initialVehicle?.image_url, ...gallery];
+    const unique = merged.filter((value): value is string => isValidVehicleImage(value));
+    return [...new Set(unique)];
   });
+  const [newFiles, setNewFiles] = useState<File[]>([]);
 
-  // Auto-generate slug when name changes
   const handleNameChange = (val: string) => {
     setName(val);
     if (!isEditing || !slug) {
@@ -77,33 +84,76 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUploadError('');
+
     if (!name.trim()) return;
 
-    onSave({
-      id: initialVehicle?.id,
-      name: name.trim(),
-      slug: slug.trim() || name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      category,
-      fuel,
-      transmission,
-      seats: Number(seats) || 5,
-      air_conditioning: airConditioning,
-      price: price ? Number(price) : null,
-      description_fr: descFr,
-      description_en: descEn,
-      description_ar: descAr,
-      image_url: images[0] || initialVehicle?.image_url || '',
-      featured,
-      available,
-      location_ids: selectedLocations,
-    });
+    const safeSlug = (slug.trim() || name.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/(^-|-$)/g, '');
+
+    try {
+      const uploadedUrls: string[] = [];
+
+      if (newFiles.length > 0) {
+        if (!supabase) {
+          throw new Error('Supabase unavailable');
+        }
+
+        for (const file of newFiles) {
+          const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+          const filePath = `vehicles/${safeSlug || 'vehicle'}/${Date.now()}-${safeFileName}`;
+
+          const { error } = await supabase.storage.from('vehicle-images').upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+
+          if (error) {
+            console.error('VEHICLE_IMAGE_UPLOAD_ERROR', error);
+            throw error;
+          }
+
+          const { data } = supabase.storage.from('vehicle-images').getPublicUrl(filePath);
+          if (!data?.publicUrl) {
+            throw new Error('Missing public URL');
+          }
+
+          uploadedUrls.push(data.publicUrl);
+        }
+      }
+
+      const finalImages = [...existingImages, ...uploadedUrls].filter(
+        (value, index, array) => value && array.indexOf(value) === index
+      );
+
+      await onSave({
+        id: initialVehicle?.id,
+        name: name.trim(),
+        slug: safeSlug,
+        category,
+        fuel,
+        transmission,
+        seats: Number(seats) || 5,
+        air_conditioning: airConditioning,
+        price: price ? Number(price) : null,
+        description_fr: descFr,
+        description_en: descEn,
+        description_ar: descAr,
+        image_url: finalImages[0] || null,
+        gallery: finalImages.slice(1),
+        featured,
+        available,
+        location_ids: selectedLocations,
+      });
+    } catch (error) {
+      console.error('VEHICLE_SAVE_OR_UPLOAD_ERROR', error);
+      setUploadError('Impossible d’enregistrer le véhicule. Veuillez réessayer.');
+    }
   };
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-      {/* Form Title & Back Action */}
       <div className="flex items-center justify-between pb-6 mb-6 border-b border-slate-100">
         <div>
           <button
@@ -128,8 +178,8 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
             Annuler
           </button>
           <button
-            type="button"
-            onClick={handleSubmit}
+            type="submit"
+            form="vehicle-form"
             className="px-5 py-2.5 bg-[#D92D3A] hover:bg-[#b8222e] active:scale-98 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Save className="w-4 h-4" />
@@ -138,8 +188,13 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Section 1: General Specs */}
+      {uploadError && (
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
+          {uploadError}
+        </div>
+      )}
+
+      <form id="vehicle-form" onSubmit={handleSubmit} className="space-y-8">
         <div>
           <h3 className="text-xs font-bold text-[#15265A] uppercase tracking-wider mb-4 pb-1 border-b border-slate-100">
             1. Caractéristiques Principales
@@ -270,7 +325,6 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
           </div>
         </div>
 
-        {/* Section 2: Agences disponibles */}
         <div>
           <h3 className="text-xs font-bold text-[#15265A] uppercase tracking-wider mb-3 pb-1 border-b border-slate-100">
             2. Disponibilité par Agence SOUBAICAR
@@ -307,7 +361,6 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
           </div>
         </div>
 
-        {/* Section 3: Multilingual Content with LanguageTabs */}
         <div>
           <div className="flex items-center justify-between mb-4 pb-1 border-b border-slate-100">
             <h3 className="text-xs font-bold text-[#15265A] uppercase tracking-wider">
@@ -363,15 +416,19 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
           )}
         </div>
 
-        {/* Section 4: Image Uploader */}
         <div>
           <h3 className="text-xs font-bold text-[#15265A] uppercase tracking-wider mb-4 pb-1 border-b border-slate-100">
             4. Photos du véhicule
           </h3>
-          <ImageUploader images={images} onChange={setImages} maxImages={6} />
+          <ImageUploader
+            existingImages={existingImages}
+            newFiles={newFiles}
+            maxImages={6}
+            onExistingImagesChange={setExistingImages}
+            onNewFilesChange={setNewFiles}
+          />
         </div>
 
-        {/* Form Bottom Actions */}
         <div className="pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
           <button
             type="button"

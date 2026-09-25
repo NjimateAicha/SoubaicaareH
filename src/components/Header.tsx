@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Logo } from './Logo';
-import { Phone, MessageCircle, Menu, X, Globe, CalendarCheck, Shield } from 'lucide-react';
+import { Phone, Menu, X, Globe, CalendarCheck, Shield } from 'lucide-react';
 import type { Language } from '../types/database';
-import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
+import { TRANSLATIONS, getStaffTransportPath } from '../lib/translations';
 
 interface HeaderProps {
   currentLang: Language;
   currentPath: string;
   onNavigate: (path: string) => void;
   onLanguageChange: (lang: Language) => void;
-  whatsappNumber: string;
   phoneNumber: string;
 }
 
@@ -18,7 +17,6 @@ export const Header: React.FC<HeaderProps> = ({
   currentPath,
   onNavigate,
   onLanguageChange,
-  whatsappNumber,
   phoneNumber,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -28,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   const navItems = [
     { label: t.nav.home, path: `/${currentLang}` },
     { label: t.nav.vehicles, path: `/${currentLang}/vehicules` },
-    { label: t.nav.locations, path: `/${currentLang}/agences` },
+    { label: t.nav.staffTransport, path: getStaffTransportPath(currentLang) },
     { label: t.nav.about, path: `/${currentLang}/a-propos` },
     { label: t.nav.contact, path: `/${currentLang}/contact` },
   ];
@@ -40,14 +38,12 @@ export const Header: React.FC<HeaderProps> = ({
     return currentPath.startsWith(itemPath);
   };
 
-  const whatsappHref = buildWhatsAppLink(whatsappNumber, '', '', '', '', currentLang);
-
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-200/80 shadow-xs transition-colors">
       {/* Top micro bar with contact info */}
       <div className="bg-[#15265A] text-white text-xs py-1.5 px-4 sm:px-8 border-b border-white/10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4 text-slate-200 text-[11px] sm:text-xs">
+          <div className="hidden sm:flex items-center gap-4 text-slate-200 text-[11px] sm:text-xs">
             <span className="font-semibold text-white/90 tracking-wide">
               {currentLang === 'ar' ? 'وكالاتنا الرسمية: العيون · بوجدور · الداخلة' : 'Agences SOUBAICAR : Laâyoune · Boujdour · Dakhla'}
             </span>
@@ -66,12 +62,6 @@ export const Header: React.FC<HeaderProps> = ({
               <Phone className="w-3 h-3 text-[#D92D3A]" />
               <span className="font-medium tabular-nums">{phoneNumber}</span>
             </a>
-            <button
-              onClick={() => onNavigate('/admin')}
-              className="hidden sm:inline-flex items-center gap-1 text-slate-300 hover:text-white transition-colors text-[11px] border border-white/20 rounded px-2 py-0.5"
-            >
-              {t.nav.admin}
-            </button>
           </div>
         </div>
       </div>
@@ -81,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Zone 1: SOUBAICAR / LVS Logo */}
         <button
           onClick={() => onNavigate(`/${currentLang}`)}
-          className="focus:outline-hidden text-start group cursor-pointer"
+          className="focus:outline-hidden text-start group cursor-pointer min-w-0 shrink"
           aria-label="SOUBAICAR Homepage"
         >
           <Logo variant="light" showTagline={true} />
@@ -110,70 +100,37 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </nav>
 
-        {/* Zone 3: Actions (Language switcher, WhatsApp, Book CTA) */}
-        <div className="flex items-center gap-3">
-          {/* Language Switcher */}
-          <div className="flex items-center bg-[#F6F7FA] border border-slate-200 rounded-lg p-1 text-xs font-bold text-[#15265A]">
-            <Globe className="w-3.5 h-3.5 mx-1 text-[#667085]" />
-            <button
-              onClick={() => onLanguageChange('fr')}
-              className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                currentLang === 'fr'
-                  ? 'bg-[#263B86] text-white shadow-xs'
-                  : 'text-[#667085] hover:text-[#15265A]'
-              }`}
+        {/* Zone 3: Actions (Language switcher, Book CTA) */}
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+          {/* Language Selector */}
+          <div dir={isRtl ? 'rtl' : 'ltr'} className="relative flex items-center bg-[#F6F7FA] border border-slate-200 rounded-lg text-[11px] sm:text-xs font-bold text-[#15265A] overflow-hidden">
+            <Globe className="hidden sm:inline-block w-3.5 h-3.5 mx-2 text-[#667085]" />
+            <select
+              aria-label="Select language"
+              value={currentLang}
+              onChange={(event) => onLanguageChange(event.target.value as Language)}
+              className="appearance-none bg-transparent border-0 pr-7 pl-2 py-2.5 sm:py-2 text-[#15265A] font-bold outline-none cursor-pointer min-w-[88px]"
             >
-              FR
-            </button>
-            <button
-              onClick={() => onLanguageChange('en')}
-              className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                currentLang === 'en'
-                  ? 'bg-[#263B86] text-white shadow-xs'
-                  : 'text-[#667085] hover:text-[#15265A]'
-              }`}
-            >
-              EN
-            </button>
-            <button
-              onClick={() => onLanguageChange('ar')}
-              className={`px-2 py-1 rounded transition-colors cursor-pointer ${
-                currentLang === 'ar'
-                  ? 'bg-[#263B86] text-white shadow-xs'
-                  : 'text-[#667085] hover:text-[#15265A]'
-              }`}
-            >
-              AR
-            </button>
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
+            </select>
+            <span className="pointer-events-none absolute right-2 text-[#667085]">▾</span>
           </div>
 
-          {/* WhatsApp Direct Action */}
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#15265A] bg-emerald-50 border border-emerald-200/80 rounded-lg hover:bg-emerald-100/70 transition-colors whitespace-nowrap"
-            title="WhatsApp SOUBAICAR"
-          >
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#25D366] text-white">
-              <MessageCircle className="w-3 h-3 fill-current" />
-            </span>
-            <span className="hidden xl:inline">WhatsApp</span>
-          </a>
-
-          {/* Primary Book Now Button */}
+          {/* Primary Book Now Button: icon-only on the smallest screens so it can never push the menu button off-screen */}
           <button
             onClick={() => onNavigate(`/${currentLang}/reserver`)}
-            className="flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#D92D3A] hover:bg-[#b8222e] active:scale-98 transition-all rounded-lg shadow-sm whitespace-nowrap cursor-pointer"
+            className="flex items-center gap-2 px-2.5 sm:px-4 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#D92D3A] hover:bg-[#b8222e] active:scale-98 transition-all rounded-lg shadow-sm whitespace-nowrap cursor-pointer"
           >
-            <CalendarCheck className="w-4 h-4" />
-            <span>{t.nav.book}</span>
+            <CalendarCheck className="w-4 h-4 shrink-0" />
+            <span className="hidden sm:inline">{t.nav.book}</span>
           </button>
 
           {/* Mobile hamburger menu toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 lg:hidden text-[#15265A] hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            className="p-2 lg:hidden shrink-0 text-[#15265A] hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -204,28 +161,6 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               );
             })}
-
-            <div className="pt-3 mt-1 border-t border-slate-100 flex flex-col gap-3">
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-emerald-500 text-white font-bold text-xs shadow-xs"
-              >
-                <MessageCircle className="w-4 h-4 fill-current" />
-                <span>WhatsApp SOUBAICAR (+212 661 140 000)</span>
-              </a>
-
-              <button
-                onClick={() => {
-                  onNavigate('/admin');
-                  setMobileMenuOpen(false);
-                }}
-                className="py-2 text-center text-xs text-[#667085] hover:text-[#15265A]"
-              >
-                {t.nav.admin}
-              </button>
-            </div>
           </div>
         </div>
       )}

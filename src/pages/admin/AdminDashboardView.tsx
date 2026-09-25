@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Car,
   CalendarCheck,
-  MapPin,
   Clock,
   ArrowRight,
   Plus,
@@ -39,8 +38,6 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
   const availableVehicles = vehicles.filter((v) => v.available).length;
   const newReservations = reservations.filter((r) => r.status === 'new');
   const confirmedReservations = reservations.filter((r) => r.status === 'confirmed').length;
-  const totalLocations = locations.length;
-
   // Recent 5 reservations
   const recentReservations = reservations.slice(0, 5);
 
@@ -119,13 +116,6 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
           onClick={() => onNavigateSection('reservations')}
         />
 
-        <StatCard
-          title="Agences SOUBAICAR"
-          value={totalLocations}
-          subtitle="Laâyoune, Boujdour, Dakhla"
-          icon={MapPin}
-          onClick={() => onNavigateSection('locations')}
-        />
       </div>
 
       {/* Quick Actions Shortcuts Bar */}
@@ -156,13 +146,6 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
             <span>Voir les réservations</span>
           </button>
 
-          <button
-            onClick={() => onNavigateSection('locations')}
-            className="px-4 py-2 bg-white hover:bg-slate-50 text-[#15265A] border border-slate-200 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
-          >
-            <MapPin className="w-4 h-4 text-[#263B86]" />
-            <span>Gérer les agences</span>
-          </button>
         </div>
       </div>
 

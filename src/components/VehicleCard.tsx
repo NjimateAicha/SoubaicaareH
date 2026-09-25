@@ -20,6 +20,8 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
 }) => {
   const t = TRANSLATIONS[currentLang];
   const isRtl = currentLang === 'ar';
+  const cardImage = vehicle.image_url || (Array.isArray(vehicle.gallery) ? vehicle.gallery[0] : '') || '';
+  const hasValidImage = /^https?:\/\//i.test(cardImage) && !cardImage.startsWith('blob:') && !cardImage.startsWith('data:');
 
   // Available agency names
   const availableLocNames = locations
@@ -30,13 +32,27 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({
     <div className="group bg-white rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden">
       {/* Visual Header & Image */}
       <div className="relative aspect-16/10 bg-slate-100 overflow-hidden">
-        <img
-          src={vehicle.image_url}
-          alt={vehicle.name}
-          className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-300"
-          loading="lazy"
-          referrerPolicy="no-referrer"
-        />
+        {hasValidImage ? (
+          <img
+            src={cardImage}
+            alt={vehicle.name}
+            className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-300"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            onError={(event) => {
+              console.error('VEHICLE_IMAGE_RENDER_ERROR', { vehicle: vehicle.name, url: cardImage });
+              const target = event.currentTarget as HTMLImageElement;
+              target.style.display = 'none';
+              const placeholder = target.parentElement?.lastElementChild as HTMLElement | null;
+              if (placeholder) placeholder.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        <div
+          className={`absolute inset-0 flex items-center justify-center text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 ${hasValidImage ? 'hidden' : 'flex'}`}
+        >
+          Image à venir
+        </div>
 
         {/* Top Badges */}
         <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">

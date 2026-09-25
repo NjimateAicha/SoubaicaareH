@@ -14,6 +14,7 @@ export interface Vehicle {
   description_en: string;
   description_ar: string;
   image_url: string;
+  gallery?: string[];
   featured: boolean;
   available: boolean;
   location_ids: string[];
@@ -34,6 +35,7 @@ export interface LocationItem {
   description_ar: string;
   image_url: string;
   active: boolean;
+  map_url?: string;
   created_at: string;
 }
 
@@ -87,6 +89,20 @@ export interface CorporateQuoteRequest {
   vehicle_type?: string;
   message?: string;
   status: CorporateQuoteStatus;
+  language: Language;
+  created_at: string;
+}
+
+export type ContactMessageStatus = 'new' | 'read' | 'replied';
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  subject?: string;
+  message: string;
+  status: ContactMessageStatus;
   language: Language;
   created_at: string;
 }

@@ -8,7 +8,7 @@ import { VehicleForm } from '../../components/admin/VehicleForm';
 interface AdminVehiclesViewProps {
   vehicles: Vehicle[];
   locations: LocationItem[];
-  onSaveVehicle: (vehicle: Partial<Vehicle>) => void;
+  onSaveVehicle: (vehicle: Partial<Vehicle>) => Promise<void>;
   onDeleteVehicle: (id: string) => void;
   onToggleAvailable: (vehicle: Vehicle) => void;
   onToggleFeatured: (vehicle: Vehicle) => void;
@@ -60,8 +60,8 @@ export const AdminVehiclesView: React.FC<AdminVehiclesViewProps> = ({
       <VehicleForm
         initialVehicle={editingVehicle.id ? editingVehicle : null}
         locations={locations}
-        onSave={(updated) => {
-          onSaveVehicle(updated);
+        onSave={async (updated) => {
+          await onSaveVehicle(updated);
           setEditingVehicle(null);
         }}
         onCancel={() => setEditingVehicle(null)}
@@ -75,13 +75,34 @@ export const AdminVehiclesView: React.FC<AdminVehiclesViewProps> = ({
         columns={[
           {
             header: 'Image',
-            render: (v: Vehicle) => (
-              <img
-                src={v.image_url}
-                alt={v.name}
-                className="w-14 h-9 rounded-lg object-cover bg-slate-900 border border-slate-200"
-              />
-            ),
+            render: (v: Vehicle) => {
+              const image = v.image_url || (Array.isArray(v.gallery) ? v.gallery[0] : '') || '';
+              const isValidImage = /^https?:\/\//i.test(image) && !image.startsWith('blob:') && !image.startsWith('data:');
+
+              return isValidImage ? (
+                <div className="relative w-14 h-9 overflow-hidden rounded-lg border border-slate-200 bg-slate-900">
+                  <img
+                    src={image}
+                    alt={v.name}
+                    className="w-full h-full object-cover"
+                    onError={(event) => {
+                      console.error('VEHICLE_IMAGE_RENDER_ERROR', { vehicle: v.name, url: image });
+                      const target = event.currentTarget as HTMLImageElement;
+                      target.style.display = 'none';
+                      const placeholder = target.parentElement?.nextElementSibling as HTMLElement | null;
+                      if (placeholder) placeholder.style.display = 'flex';
+                    }}
+                  />
+                  <div className="hidden absolute inset-0 items-center justify-center text-[8px] font-bold text-slate-400 bg-slate-100">
+                    Image à venir
+                  </div>
+                </div>
+              ) : (
+                <div className="flex w-14 h-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-[8px] font-bold text-slate-500">
+                  Image à venir
+                </div>
+              );
+            },
           },
           {
             header: 'Nom du Véhicule',

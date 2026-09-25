@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Compass, Users, Car, UserCheck, Headphones, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Compass, Users, Car, UserCheck, Headphones, CheckCircle2, ArrowRight, Phone, MessageCircle } from 'lucide-react';
 import type { Language, LocationItem } from '../types/database';
 import { TRANSLATIONS } from '../lib/translations';
 import { ASSET_IMAGES } from '../lib/initialData';
@@ -17,6 +17,27 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 }) => {
   const t = TRANSLATIONS[currentLang];
   const isRtl = currentLang === 'ar';
+
+  const contactPeople = [
+    {
+      name: 'M. Soubai Sidi Mohammed Yahdih',
+      phone: '+212 661 384 118',
+      email: 'Contact@soubaicar.com',
+      whatsapp: null,
+    },
+    {
+      name: 'M. SOUBAI HAMZA',
+      phone: '+212 662 104 425',
+      email: 'Contact@soubaicar.com',
+      whatsapp: '+212 662 104 425',
+    },
+    {
+      name: 'Commercial',
+      phone: '+212 662 104 479',
+      email: 'Contact@soubaicar.com',
+      whatsapp: null,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#F6F7FA] py-12">
@@ -60,33 +81,78 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div className="space-y-4 text-xs sm:text-sm text-[#1C2434] leading-relaxed">
                 <p>
                   {currentLang === 'ar'
-                    ? 'تعتبر سوبيكار إحدى الوكالات الرائدة في كراء السيارات بالمغرب، حيث نوفر أسطولاً متنوعاً وحديثاً يغطي مدن العيون، بوجدور والداخلة.'
-                    : 'SOUBAICAR s’est imposée comme une référence de confiance dans le domaine de la location automobile au Maroc. Grâce à notre maillage stratégique couvrant Laâyoune, Boujdour et Dakhla, nous garantissons une mobilité sans interruption pour nos clients particuliers et corporatifs.'}
+                    ? 'تأسست سوبيكار سنة 1989 وتطورت عبر عقود من الخبرة لتصبح شريكاً موثوقاً في كراء السيارات والنقل المهني في جنوب المغرب.'
+                    : 'Depuis 1989, SOUBAICAR s’est développée au fil des décennies pour devenir un acteur de référence dans la location de véhicules et le transport professionnel au Sud du Maroc.'}
                 </p>
                 <p>
                   {currentLang === 'ar'
-                    ? 'نحرص على صيانة سياراتنا دورياً وتقديم أسعار واضحة بدون رسوم خفية، مع تسليم فوري في المطارات ومراكز المدن.'
-                    : 'Chaque véhicule de notre flotte bénéficie d’un contrôle technique rigoureux avant livraison. Nos contrats prévoient le kilométrage illimité, l’assurance tous risques et la possibilité d’ajouter un deuxième conducteur gratuitement.'}
+                    ? 'نقدم خدماتنا في العيون وبوجدور والداخلة مع التزام واضح بالشفافية، الجودة والسرعة في الاستجابة.'
+                    : 'Nous accompagnons aujourd’hui particuliers et entreprises dans les villes de Laâyoune, Boujdour et Dakhla avec une offre fiable, lisible et conçue pour la mobilité locale et professionnelle.'}
                 </p>
               </div>
 
               <div className="pt-6 mt-6 border-t border-slate-100 flex items-center gap-6">
                 <div>
-                  <span className="text-2xl font-black text-[#263B86] tabular-nums">3</span>
+                  <span className="text-2xl font-black text-[#263B86] tabular-nums">1989</span>
+                  <span className="text-xs text-[#667085] block font-semibold">{currentLang === 'ar' ? 'تأسيس الشركة' : 'Création'}</span>
+                </div>
+                <div className="h-8 w-px bg-slate-200" />
+                <div>
+                  <span className="text-2xl font-black text-[#D92D3A] tabular-nums">3</span>
                   <span className="text-xs text-[#667085] block font-semibold">{currentLang === 'ar' ? 'وكالات رسمية' : 'Agences régionales'}</span>
                 </div>
                 <div className="h-8 w-px bg-slate-200" />
                 <div>
-                  <span className="text-2xl font-black text-[#D92D3A] tabular-nums">100%</span>
-                  <span className="text-xs text-[#667085] block font-semibold">{currentLang === 'ar' ? 'كيلومترات غير محدودة' : 'Kilométrage illimité'}</span>
-                </div>
-                <div className="h-8 w-px bg-slate-200" />
-                <div>
                   <span className="text-2xl font-black text-[#15265A] tabular-nums">24/7</span>
-                  <span className="text-xs text-[#667085] block font-semibold">{currentLang === 'ar' ? 'مساعدة طرقية' : 'Assistance continue'}</span>
+                  <span className="text-xs text-[#667085] block font-semibold">{currentLang === 'ar' ? 'مساعدة مستمرة' : 'Assistance continue'}</span>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="mb-16">
+          <div className="text-center max-w-xl mx-auto mb-10">
+            <h2 className="text-2xl font-bold text-[#15265A] mb-2">
+              {currentLang === 'ar' ? 'أشخاص التواصل' : 'Contacts clés'}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {contactPeople.map((person) => (
+              <div key={person.name} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs flex flex-col justify-between h-full">
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-[#15265A]">{person.name}</h3>
+                  </div>
+                  <div className="w-11 h-11 rounded-xl bg-[#15265A] text-white flex items-center justify-center">
+                    <UserCheck className="w-5 h-5" />
+                  </div>
+                </div>
+
+                <div className="space-y-3 text-sm text-[#1C2434]">
+                  <a href={`tel:${person.phone.replace(/[^0-9+]/g, '')}`} className="flex items-center gap-2 hover:text-[#263B86] transition-colors">
+                    <Phone className="w-4 h-4 text-[#D92D3A]" />
+                    <span className="tabular-nums">{person.phone}</span>
+                  </a>
+                  <a href={`mailto:${person.email}`} className="flex items-center gap-2 break-all hover:text-[#263B86] transition-colors">
+                    <Headphones className="w-4 h-4 text-[#263B86]" />
+                    <span>{person.email}</span>
+                  </a>
+                  {person.whatsapp && (
+                    <a
+                      href={`https://wa.me/${person.whatsapp.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-[#25D366] hover:text-[#1fae57] transition-colors"
+                    >
+                      <MessageCircle className="w-4 h-4 fill-current" />
+                      WhatsApp
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

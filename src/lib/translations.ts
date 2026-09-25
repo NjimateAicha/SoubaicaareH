@@ -13,7 +13,7 @@ export const TRANSLATIONS = {
       staffTransport: 'Transport du personnel',
     },
     hero: {
-      title: 'Location de voitures à Laâyoune, Boujdour et Dakhla',
+      title: 'Location de voitures à Laâyoune et Dakhla',
       subtitle: 'Une flotte fiable et adaptée à vos déplacements professionnels, personnels et touristiques dans le Sud du Maroc.',
       ctaPrimary: 'Réserver maintenant',
       ctaSecondary: 'Voir notre flotte',
@@ -100,6 +100,12 @@ export const TRANSLATIONS = {
     testimonials: {
       title: 'Ce que disent nos clients',
       subtitle: 'Témoignages authentiques de clients particuliers et professionnels.',
+    },
+    googleReviews: {
+      kicker: 'Avis clients',
+      title: 'Avis Google vérifiés',
+      subtitle: 'Découvrez les avis de nos clients directement sur notre fiche Google.',
+      cta: 'Voir tous les avis sur Google',
     },
     finalCta: {
       title: 'Besoin d’un véhicule ?',
@@ -306,7 +312,7 @@ export const TRANSLATIONS = {
       staffTransport: 'Staff Transportation',
     },
     hero: {
-      title: 'Car Rental in Laâyoune, Boujdour and Dakhla',
+      title: 'Car Rental in Laâyoune and Dakhla',
       subtitle: 'A reliable fleet tailored to your business, personal, and leisure travels across Southern Morocco.',
       ctaPrimary: 'Book Now',
       ctaSecondary: 'View Our Fleet',
@@ -393,6 +399,12 @@ export const TRANSLATIONS = {
     testimonials: {
       title: 'What Our Clients Say',
       subtitle: 'Genuine reviews from domestic and international travelers.',
+    },
+    googleReviews: {
+      kicker: 'Customer Reviews',
+      title: 'Verified Google Reviews',
+      subtitle: 'Discover what our customers say, directly from our Google Business profile.',
+      cta: 'View all reviews on Google',
     },
     finalCta: {
       title: 'Need a Car in Southern Morocco?',
@@ -599,7 +611,7 @@ export const TRANSLATIONS = {
       staffTransport: 'نقل الموظفين',
     },
     hero: {
-      title: 'كراء السيارات في العيون، بوجدور والداخلة',
+      title: 'كراء السيارات في العيون والداخلة',
       subtitle: 'أسطول موثوق وملائم لتنقلاتكم المهنية والشخصية والسياحية في جنوب المملكة المغربية.',
       ctaPrimary: 'احجز الآن',
       ctaSecondary: 'استعرض سياراتنا',
@@ -686,6 +698,12 @@ export const TRANSLATIONS = {
     testimonials: {
       title: 'آراء زبائننا',
       subtitle: 'شهادات حقيقية من زبائن محليين ودوليين جربوا خدماتنا.',
+    },
+    googleReviews: {
+      kicker: 'آراء العملاء',
+      title: 'تقييمات Google الموثقة',
+      subtitle: 'اكتشفوا آراء عملائنا مباشرة على ملفنا في Google.',
+      cta: 'مشاهدة جميع التقييمات على Google',
     },
     finalCta: {
       title: 'هل تحتاج إلى سيارة؟',
@@ -921,4 +939,14 @@ export function buildWhatsAppLink(
   }
 
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+}
+
+// Staff Transportation (B2B) route slug differs per locale, mirroring the
+// existing vehicules/vehicles dual-slug convention used across the site.
+export function getStaffTransportSlug(lang: Language): string {
+  return lang === 'fr' ? 'transport-du-personnel' : 'staff-transportation';
+}
+
+export function getStaffTransportPath(lang: Language): string {
+  return `/${lang}/${getStaffTransportSlug(lang)}`;
 }
