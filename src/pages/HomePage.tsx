@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { QuickBookingForm } from '../components/QuickBookingForm';
 import { VehicleCard } from '../components/VehicleCard';
 import {
   ShieldCheck,
-  Compass,
-  Users,
+  CreditCard,
+  Disc,
   Car,
   UserCheck,
   Headphones,
@@ -15,6 +15,8 @@ import {
   CalendarCheck,
   Building2,
   Star,
+  Quote,
+  ChevronDown,
   ExternalLink,
 } from 'lucide-react';
 import type { LocationItem, Vehicle, SiteSettings, Language } from '../types/database';
@@ -57,10 +59,16 @@ export const HomePage: React.FC<HomePageProps> = ({
   const displayFleet = featuredVehicles.length > 0 ? featuredVehicles : vehicles.slice(0, 3);
   const GOOGLE_REVIEWS_URL = 'https://share.google/TUD01udlreI3hfNFu';
 
+  const INITIAL_REVIEWS_COUNT = 3;
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const visibleReviews = showAllReviews
+    ? t.googleReviews.items
+    : t.googleReviews.items.slice(0, INITIAL_REVIEWS_COUNT);
+
   const whatsappHeroHref = buildWhatsAppLink(settings.whatsapp, '', '', '', '', currentLang);
 
-  // Icon mapping for the 6 verified benefits
-  const benefitIcons = [Compass, ShieldCheck, Users, Car, UserCheck, Headphones];
+  // Icon mapping for the verified benefits
+  const benefitIcons = [CreditCard, Disc, Car, UserCheck, Headphones];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -88,16 +96,6 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 w-full">
           <div className="max-w-3xl">
-            {/* Editorial brand kicker */}
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-[#D92D3A]" />
-              <span className="text-xs sm:text-sm font-bold tracking-wider text-slate-200 uppercase">
-                {currentLang === 'ar' ? 'وكالات سوبيكار الرسمية' : 'SOUBAICAR · Maroc'}
-              </span>
-              <span aria-hidden="true" className="text-slate-400">·</span>
-              <span className="text-xs text-slate-300">Laâyoune · Boujdour · Dakhla</span>
-            </div>
-
             {/* Headline */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight md:leading-tight mb-6" style={{ textWrap: 'balance' }}>
               {heroTitle}
@@ -154,7 +152,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         />
       </section>
 
-      {/* 3. WHY CHOOSE SOUBAICAR (6 Verified Benefits Only) */}
+      {/* 3. WHY CHOOSE SOUBAICAR (Verified Benefits Only) */}
       <section className="py-20 bg-[#F6F7FA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -271,33 +269,66 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* 7. GOOGLE REVIEWS: links to the verified Google Business profile rather than
-          displaying invented ratings or unverified testimonial content. */}
+      {/* 7. CUSTOMER REVIEWS: a curated selection of genuine Google reviews.
+          Star ratings are intentionally not shown per review since exact
+          per-review scores were not provided — only the real names, review
+          counts/dates and quotes as left on Google. */}
       <section className="py-20 bg-[#F6F7FA] border-t border-slate-200">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center mx-auto mb-6">
-            <Star className="w-7 h-7 text-[#263B86]" fill="currentColor" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center mx-auto mb-6">
+              <Star className="w-7 h-7 text-[#263B86]" fill="currentColor" />
+            </div>
+            <span className="text-xs font-bold uppercase tracking-wider text-[#D92D3A] mb-2 block">
+              {t.googleReviews.kicker}
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#15265A] mb-4">
+              {t.googleReviews.title}
+            </h2>
+            <p className="text-sm sm:text-base text-[#667085] leading-relaxed">
+              {t.googleReviews.subtitle}
+            </p>
           </div>
 
-          <span className="text-xs font-bold uppercase tracking-wider text-[#D92D3A] mb-2 block">
-            {t.googleReviews.kicker}
-          </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#15265A] mb-4">
-            {t.googleReviews.title}
-          </h2>
-          <p className="text-sm sm:text-base text-[#667085] leading-relaxed mb-8 max-w-xl mx-auto">
-            {t.googleReviews.subtitle}
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {visibleReviews.map((review) => (
+              <div
+                key={review.name}
+                className="bg-white rounded-xl border border-slate-200/80 shadow-xs p-6 flex flex-col"
+              >
+                <Quote className="w-6 h-6 text-[#263B86]/25 mb-3 shrink-0" fill="currentColor" />
+                <p className="text-sm text-[#1C2434] leading-relaxed mb-4 grow">
+                  {review.text}
+                </p>
+                <div className="pt-3 border-t border-slate-100">
+                  <span className="block text-sm font-bold text-[#15265A]">{review.name}</span>
+                  <span className="block text-xs text-[#667085] mt-0.5">{review.meta}</span>
+                </div>
+              </div>
+            ))}
+          </div>
 
-          <a
-            href={GOOGLE_REVIEWS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#15265A] hover:bg-[#263B86] text-white font-bold text-sm rounded-xl shadow-lg transition-all"
-          >
-            <span>{t.googleReviews.cta}</span>
-            <ExternalLink className="w-4 h-4" />
-          </a>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {t.googleReviews.items.length > INITIAL_REVIEWS_COUNT && (
+              <button
+                onClick={() => setShowAllReviews((prev) => !prev)}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-100 border border-slate-200 text-[#15265A] font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer"
+              >
+                <span>{showAllReviews ? t.googleReviews.showLess : t.googleReviews.showMore}</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${showAllReviews ? 'rotate-180' : ''}`} />
+              </button>
+            )}
+
+            <a
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#15265A] hover:bg-[#263B86] text-white font-bold text-sm rounded-xl shadow-lg transition-all"
+            >
+              <span>{t.googleReviews.cta}</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </section>
 

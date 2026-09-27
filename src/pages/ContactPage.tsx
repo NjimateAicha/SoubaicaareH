@@ -3,6 +3,7 @@ import { MapPin, Phone, Mail, MessageCircle, Send, CheckCircle2, ExternalLink, N
 import type { Language, LocationItem } from '../types/database';
 import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
 import { DataService } from '../lib/supabase';
+import { PhonePrefixInput, DEFAULT_PHONE_PREFIX } from '../components/PhonePrefixInput';
 
 interface ContactPageProps {
   currentLang: Language;
@@ -24,6 +25,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
 
   const [name, setName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [phonePrefix, setPhonePrefix] = useState(DEFAULT_PHONE_PREFIX);
   const [userPhone, setUserPhone] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
@@ -40,7 +42,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
     try {
       await DataService.createContactMessage({
         name,
-        phone: userPhone,
+        phone: `${phonePrefix} ${userPhone}`.trim(),
         email: userEmail,
         subject,
         message,
@@ -129,16 +131,15 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                     <label className="block text-xs font-bold text-[#15265A] uppercase tracking-wider mb-1.5">
                       {t.reservationForm.phone} *
                     </label>
-                    <input
-                      type="tel"
-                      value={userPhone}
-                      onChange={(e) => setUserPhone(e.target.value)}
+                    <PhonePrefixInput
+                      currentLang={currentLang}
+                      prefix={phonePrefix}
+                      onPrefixChange={setPhonePrefix}
+                      number={userPhone}
+                      onNumberChange={setUserPhone}
+                      placeholder={currentLang === 'ar' ? 'مثال: 600 000 6' : 'Ex : 6XX XXX XXX'}
                       required
-                      className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] text-xs font-medium rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
                     />
-                    <p className="text-[10px] text-slate-400 mt-1">
-                      {currentLang === 'ar' ? 'مثال: 600 000 000 212+' : 'Format : +212 6XX XXX XXX'}
-                    </p>
                   </div>
                 </div>
 
@@ -238,7 +239,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Phone className="w-4 h-4 text-[#D92D3A]" />
-                  <span className="font-semibold tabular-nums">+212 662 104 479</span>
+                  <span className="font-semibold tabular-nums">+212 667 75 70 89</span>
                 </div>
                 <div className="flex items-center gap-2.5 break-all">
                   <Mail className="w-4 h-4 text-[#263B86]" />

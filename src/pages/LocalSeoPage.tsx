@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Phone, MessageCircle, Plane, CheckCircle2, ShieldCheck, ArrowRight, HelpCircle } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, Plane, CheckCircle2, CreditCard, Disc, ArrowRight, HelpCircle } from 'lucide-react';
 import type { LocationItem, Vehicle, Language } from '../types/database';
 import { VehicleCard } from '../components/VehicleCard';
 import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
@@ -72,8 +72,10 @@ export const LocalSeoPage: React.FC<LocalSeoPageProps> = ({
             </h1>
             <p className="text-sm sm:text-base text-slate-200 mb-8 leading-relaxed">
               {isAr
-                ? `استأجر سيارتك في ${cityName} بكل أمان مع سوبيكار: كيلومترات غير محدودة، تسليم مجاني في المطار وتأمين شامل.`
-                : `Réservez votre véhicule à ${cityName} en toute sérénité : kilométrage illimité, livraison aéroport 24/7 et assurance tous risques sans mauvaise surprise.`}
+                ? `استأجر سيارتك في ${cityName} بكل أمان مع سوبيكار: تسليم مجاني في المطار، الدفع عند الاستلام وخدمة محلية سريعة التجاوب.`
+                : isEn
+                ? `Book your vehicle in ${cityName} with confidence: free airport delivery, payment on delivery and a responsive local team.`
+                : `Réservez votre véhicule à ${cityName} en toute sérénité : livraison aéroport 24/7, paiement à la livraison et un service local réactif.`}
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -111,26 +113,30 @@ export const LocalSeoPage: React.FC<LocalSeoPageProps> = ({
           </div>
 
           <div className="bg-white p-6 rounded-xl border border-slate-200">
-            <ShieldCheck className="w-6 h-6 text-[#263B86] mb-3" />
+            <CreditCard className="w-6 h-6 text-[#263B86] mb-3" />
             <h3 className="font-bold text-base text-[#15265A] mb-1">
-              {isAr ? 'تأمين شامل 100%' : 'Assurance Tous Risques'}
+              {isAr ? 'الدفع عند الاستلام' : isEn ? 'Payment on Delivery' : 'Paiement à la Livraison'}
             </h3>
             <p className="text-xs text-[#667085] leading-relaxed">
               {isAr
-                ? 'استمتع برحلتك مع حماية كاملة ومساعدة تقنية على مدار الساعة طيلة أيام الأسبوع.'
-                : 'Roulez l’esprit tranquille avec une assistance mécanique 24h/24 et 7j/7 dans toute la région.'}
+                ? 'سددوا قيمة الكراء عند استلام السيارة، ببساطة وشفافية تامة.'
+                : isEn
+                ? 'Pay for your rental when the vehicle is delivered, simply and transparently.'
+                : 'Réglez votre location au moment de la prise en charge du véhicule, en toute simplicité et transparence.'}
             </p>
           </div>
 
           <div className="bg-white p-6 rounded-xl border border-slate-200">
-            <CheckCircle2 className="w-6 h-6 text-emerald-600 mb-3" />
+            <Disc className="w-6 h-6 text-[#263B86] mb-3" />
             <h3 className="font-bold text-base text-[#15265A] mb-1">
-              {isAr ? 'بدون رسوم خفية' : 'Kilométrage Illimité Réel'}
+              {isAr ? 'سيارات مفحوصة بانتظام' : isEn ? 'Regularly Checked Vehicles' : 'Véhicules Contrôlés Régulièrement'}
             </h3>
             <p className="text-xs text-[#667085] leading-relaxed">
               {isAr
-                ? 'حرية تامة في التنقل بين مدن ومسارات الجنوب دون احتساب الكيلومترات الزائدة.'
-                : 'Déplacez-vous librement entre côtes et pistes sahariennes sans frais kilométriques additionnels.'}
+                ? 'متابعة دورية لحالة السيارات وإطاراتها لضمان تنقلات آمنة ومريحة في الجنوب.'
+                : isEn
+                ? 'Regular monitoring of vehicle condition and tires for safe, comfortable travel across the South.'
+                : 'Un suivi régulier de l’état des véhicules et des pneumatiques pour des trajets sûrs et confortables dans le Sud.'}
             </p>
           </div>
         </div>
@@ -177,12 +183,14 @@ export const LocalSeoPage: React.FC<LocalSeoPageProps> = ({
 
             <div className="p-4 rounded-xl bg-[#F6F7FA] border border-slate-100">
               <h4 className="font-bold text-[#15265A] mb-1">
-                {isAr ? 'هل الكيلومترات محدودة؟' : 'Le kilométrage est-il réellement illimité ?'}
+                {isAr ? `كيف يتم الدفع في ${cityName}؟` : isEn ? 'How does payment work?' : `Comment s'effectue le paiement à ${cityName} ?`}
               </h4>
               <p className="text-slate-600">
                 {isAr
-                  ? 'نعم، جميع عقود سوبيكار تتضمن كيلومترات غير محدودة مجاناً طيلة مدة الإيجار.'
-                  : 'Oui, tous nos contrats de location SOUBAICAR incluent d’office le kilométrage illimité sans surcoût.'}
+                  ? `يتم الدفع عند استلام السيارة لدى وكالة سوبيكار ${cityName}، حسب الطرق المتاحة.`
+                  : isEn
+                  ? `Payment is made when you pick up the vehicle at the SOUBAICAR ${cityName} branch, according to the available payment methods.`
+                  : `Le paiement s'effectue à la livraison du véhicule auprès de l'agence SOUBAICAR ${cityName}, selon les moyens de paiement disponibles.`}
               </p>
             </div>
           </div>

@@ -513,6 +513,7 @@ export default function App() {
           onNavigate={handleNavigate}
           onLanguageChange={handleLanguageChange}
           phoneNumber={settings.phone}
+          email={settings.email}
         />
       )}
 

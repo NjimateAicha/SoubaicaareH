@@ -22,22 +22,14 @@ export const Logo: React.FC<LogoProps> = ({ variant = 'light', className = '', s
         />
       </div>
 
-      {/* Wordmark */}
-      <div className="flex flex-col min-w-0">
-        <div className="flex items-center gap-1">
-          <span className={`text-base sm:text-xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-[#15265A]'}`}>
-            SOUBAI
-          </span>
-          <span className={`text-base sm:text-xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-[#15265A]'}`}>
-            CAR
-          </span>
-        </div>
-        {showTagline && (
+      {/* Tagline only: the logo image itself carries the full brand mark */}
+      {showTagline && (
+        <div className="flex flex-col min-w-0 justify-center">
           <span className={`hidden sm:block text-[9px] uppercase tracking-widest font-semibold ${isDark ? 'text-slate-300' : 'text-[#667085]'}`}>
             Laâyoune · Dakhla
           </span>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

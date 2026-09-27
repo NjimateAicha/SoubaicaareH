@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Logo } from './Logo';
-import { Phone, Menu, X, Globe, CalendarCheck, Shield } from 'lucide-react';
+import { Phone, Mail, Menu, X, Globe, CalendarCheck } from 'lucide-react';
 import type { Language } from '../types/database';
 import { TRANSLATIONS, getStaffTransportPath } from '../lib/translations';
 
@@ -10,6 +10,7 @@ interface HeaderProps {
   onNavigate: (path: string) => void;
   onLanguageChange: (lang: Language) => void;
   phoneNumber: string;
+  email: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigate,
   onLanguageChange,
   phoneNumber,
+  email,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = TRANSLATIONS[currentLang];
@@ -42,27 +44,21 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-200/80 shadow-xs transition-colors">
       {/* Top micro bar with contact info */}
       <div className="bg-[#15265A] text-white text-xs py-1.5 px-4 sm:px-8 border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="hidden sm:flex items-center gap-4 text-slate-200 text-[11px] sm:text-xs">
-            <span className="font-semibold text-white/90 tracking-wide">
-              {currentLang === 'ar' ? 'وكالاتنا الرسمية: العيون · بوجدور · الداخلة' : 'Agences SOUBAICAR : Laâyoune · Boujdour · Dakhla'}
-            </span>
-            <span className="hidden md:inline-block text-white/30">|</span>
-            <span className="hidden md:inline-flex items-center gap-1 text-slate-200">
-              <Shield className="w-3 h-3 text-[#D92D3A]" />
-              {currentLang === 'ar' ? 'تأمين شامل وكيلومترات غير محدودة' : 'Kilométrage illimité & Assurance tous risques'}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4 text-[11px] sm:text-xs">
-            <a
-              href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors"
-            >
-              <Phone className="w-3 h-3 text-[#D92D3A]" />
-              <span className="font-medium tabular-nums">{phoneNumber}</span>
-            </a>
-          </div>
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
+          <a
+            href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
+            className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors"
+          >
+            <Phone className="w-3 h-3 text-[#D92D3A]" />
+            <span className="font-medium tabular-nums">{phoneNumber}</span>
+          </a>
+          <a
+            href={`mailto:${email}`}
+            className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors"
+          >
+            <Mail className="w-3 h-3 text-[#D92D3A]" />
+            <span className="font-medium">{email}</span>
+          </a>
         </div>
       </div>
 

@@ -2,19 +2,13 @@ import React, { useState } from 'react';
 import {
   Building2,
   User,
-  Mail,
-  Phone,
   MapPin,
   Users,
-  Repeat,
-  Navigation,
-  Clock,
-  Car,
   FileText,
   CheckCircle2,
   Send,
 } from 'lucide-react';
-import type { Language, CorporateQuoteFrequency } from '../types/database';
+import type { Language } from '../types/database';
 import { TRANSLATIONS } from '../lib/translations';
 import { DataService } from '../lib/supabase';
 
@@ -27,15 +21,8 @@ export const CorporateQuoteForm: React.FC<CorporateQuoteFormProps> = ({ currentL
 
   const [companyName, setCompanyName] = useState('');
   const [contactName, setContactName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
   const [employeesCount, setEmployeesCount] = useState('');
-  const [frequency, setFrequency] = useState<CorporateQuoteFrequency>('daily');
-  const [pickupLocation, setPickupLocation] = useState('');
-  const [destination, setDestination] = useState('');
-  const [scheduleDetails, setScheduleDetails] = useState('');
-  const [vehicleType, setVehicleType] = useState('');
   const [message, setMessage] = useState('');
 
   const [submitting, setSubmitting] = useState(false);
@@ -44,7 +31,7 @@ export const CorporateQuoteForm: React.FC<CorporateQuoteFormProps> = ({ currentL
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!companyName || !contactName || !phone || !city) return;
+    if (!companyName || !contactName || !city) return;
 
     setSubmitting(true);
     setSubmitError('');
@@ -52,15 +39,18 @@ export const CorporateQuoteForm: React.FC<CorporateQuoteFormProps> = ({ currentL
       await DataService.createCorporateQuoteRequest({
         company_name: companyName,
         contact_name: contactName,
-        email,
-        phone,
+        // This minimal first-contact form no longer collects email/phone or
+        // trip details; the sales team follows up using the company name and
+        // city, then gathers the rest verbally. Silent defaults keep the
+        // record shape intact for the admin views and DB schema.
+        email: '',
+        phone: '',
         city,
         employees_count: employeesCount,
-        frequency,
-        pickup_location: pickupLocation,
-        destination,
-        schedule_details: scheduleDetails,
-        vehicle_type: vehicleType,
+        frequency: 'other',
+        pickup_location: '',
+        destination: '',
+        schedule_details: '',
         message,
         language: currentLang,
       });
@@ -81,15 +71,8 @@ export const CorporateQuoteForm: React.FC<CorporateQuoteFormProps> = ({ currentL
     setSubmitted(false);
     setCompanyName('');
     setContactName('');
-    setEmail('');
-    setPhone('');
     setCity('');
     setEmployeesCount('');
-    setFrequency('daily');
-    setPickupLocation('');
-    setDestination('');
-    setScheduleDetails('');
-    setVehicleType('');
     setMessage('');
   };
 
@@ -156,34 +139,6 @@ export const CorporateQuoteForm: React.FC<CorporateQuoteFormProps> = ({ currentL
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className={labelClass}>{t.email}</label>
-          <div className="relative">
-            <Mail className={iconClass} />
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={inputClass}
-            />
-          </div>
-        </div>
-        <div>
-          <label className={labelClass}>{t.phone} *</label>
-          <div className="relative">
-            <Phone className={iconClass} />
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={inputClass}
-              required
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div>
           <label className={labelClass}>{t.city} *</label>
           <div className="relative">
             <MapPin className={iconClass} />
@@ -206,80 +161,6 @@ export const CorporateQuoteForm: React.FC<CorporateQuoteFormProps> = ({ currentL
               inputMode="numeric"
               value={employeesCount}
               onChange={(e) => setEmployeesCount(e.target.value)}
-              className={inputClass}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Frequency */}
-      <div className="mb-4">
-        <label className={labelClass}>{t.frequency}</label>
-        <div className="relative">
-          <Repeat className={iconClass} />
-          <select
-            value={frequency}
-            onChange={(e) => setFrequency(e.target.value as CorporateQuoteFrequency)}
-            className={inputClass}
-          >
-            <option value="daily">{t.frequencyDaily}</option>
-            <option value="weekly">{t.frequencyWeekly}</option>
-            <option value="occasional">{t.frequencyOccasional}</option>
-            <option value="other">{t.frequencyOther}</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className={labelClass}>{t.pickupLocation}</label>
-          <div className="relative">
-            <Navigation className={iconClass} />
-            <input
-              type="text"
-              value={pickupLocation}
-              onChange={(e) => setPickupLocation(e.target.value)}
-              className={inputClass}
-            />
-          </div>
-        </div>
-        <div>
-          <label className={labelClass}>{t.destination}</label>
-          <div className="relative">
-            <MapPin className={iconClass} />
-            <input
-              type="text"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              className={inputClass}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className={labelClass}>{t.schedule}</label>
-          <div className="relative">
-            <Clock className={iconClass} />
-            <input
-              type="text"
-              value={scheduleDetails}
-              onChange={(e) => setScheduleDetails(e.target.value)}
-              className={inputClass}
-            />
-          </div>
-        </div>
-        <div>
-          <label className={labelClass}>
-            {t.vehicleType} <span className="normal-case font-medium text-slate-400">{t.vehicleTypeOptional}</span>
-          </label>
-          <div className="relative">
-            <Car className={iconClass} />
-            <input
-              type="text"
-              value={vehicleType}
-              onChange={(e) => setVehicleType(e.target.value)}
               className={inputClass}
             />
           </div>

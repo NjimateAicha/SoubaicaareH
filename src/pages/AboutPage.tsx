@@ -20,9 +20,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
   const contactPeople = [
     {
-      name: 'M. Soubai Sidi Mohammed Yahdih',
+      name: 'M. SOUBAI Mohammed Yahdih',
       phone: '+212 661 384 118',
-      email: 'Contact@soubaicar.com',
+      email: 'soubaimed@yahoo.es',
       whatsapp: null,
     },
     {
@@ -33,7 +33,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
     },
     {
       name: 'Commercial',
-      phone: '+212 662 104 479',
+      phone: '+212 667 75 70 89',
       email: 'Contact@soubaicar.com',
       whatsapp: null,
     },
@@ -156,7 +156,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </div>
         </div>
 
-        {/* 6 Verified Commitments */}
+        {/* Verified Commitments */}
         <div className="mb-16">
           <div className="text-center max-w-xl mx-auto mb-10">
             <h2 className="text-2xl font-bold text-[#15265A] mb-2">

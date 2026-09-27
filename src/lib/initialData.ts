@@ -5,6 +5,8 @@ import agencyLaayouneImg from '../assets/images/agency_laayoune_facade_179027159
 import agencyDakhlaImg from '../assets/images/agency_dakhla_lagoon_1790271602448.jpg';
 import agencyBoujdourImg from '../assets/images/agency_boujdour_coast_1790271613020.jpg';
 import vehicleSuvImg from '../assets/images/vehicle_suv_showcase_1790271623037.jpg';
+import corporatePromoImg from '../assets/images/corporate_promo_flyer.png';
+import staffTransportFleetImg from '../assets/images/staff_transport_fleet.png';
 
 export const ASSET_IMAGES = {
   hero: heroImg,
@@ -12,6 +14,8 @@ export const ASSET_IMAGES = {
   agencyDakhla: agencyDakhlaImg,
   agencyBoujdour: agencyBoujdourImg,
   vehicleSuv: vehicleSuvImg,
+  corporatePromo: corporatePromoImg,
+  staffTransportFleet: staffTransportFleetImg,
 };
 
 export const INITIAL_LOCATIONS: LocationItem[] = [
@@ -388,9 +392,9 @@ export const INITIAL_SETTINGS: SiteSettings = {
   hero_title_fr: 'Location de voitures à Laâyoune et Dakhla',
   hero_title_en: 'Car Rental in Laâyoune and Dakhla',
   hero_title_ar: 'كراء السيارات في العيون والداخلة',
-  hero_subtitle_fr: 'Une flotte fiable et adaptée à vos déplacements professionnels, personnels et touristiques dans le Sud du Maroc.',
-  hero_subtitle_en: 'A reliable fleet tailored to your business, personal, and tourism travel across Southern Morocco.',
-  hero_subtitle_ar: 'أسطول موثوق وملائم لتنقلاتكم المهنية والشخصية والسياحية في جنوب المملكة المغربية.',
+  hero_subtitle_fr: 'Une flotte fiable et adaptée à tous vos déplacements professionnels, personnels et touristiques dans le Sud du Maroc.',
+  hero_subtitle_en: 'A reliable fleet tailored to all your business, personal, and tourism travel across Southern Morocco.',
+  hero_subtitle_ar: 'أسطول موثوق وملائم لجميع تنقلاتكم المهنية والشخصية والسياحية في جنوب المملكة المغربية.',
   footer_text_fr: 'SOUBAICAR - Votre partenaire de confiance pour la location de véhicules dans les provinces du Sud : Laâyoune, Boujdour et Dakhla.',
   footer_text_en: 'SOUBAICAR - Your trusted car rental partner across the Southern provinces: Laâyoune, Boujdour, and Dakhla.',
   footer_text_ar: 'سوبيكار - شريككم الموثوق لكراء السيارات في الأقاليم الجنوبية: العيون، بوجدور والداخلة.',

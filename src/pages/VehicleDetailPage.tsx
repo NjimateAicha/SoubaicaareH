@@ -172,15 +172,15 @@ export const VehicleDetailPage: React.FC<VehicleDetailPageProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-[#1C2434]">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="font-semibold">{currentLang === 'ar' ? 'كيلومترات غير محدودة' : 'Kilométrage illimité'}</span>
+                  <span className="font-semibold">
+                    {currentLang === 'ar' ? 'الدفع عند الاستلام' : currentLang === 'en' ? 'Payment on delivery' : 'Paiement à la livraison'}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="font-semibold">{currentLang === 'ar' ? 'تأمين شامل لجميع المخاطر' : 'Assurance tous risques'}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="font-semibold">{currentLang === 'ar' ? 'سائق ثانٍ مجاناً' : '2ème conducteur gratuit'}</span>
+                  <span className="font-semibold">
+                    {currentLang === 'ar' ? 'فحص الإطارات قبل كل كراء' : currentLang === 'en' ? 'Tires checked before every rental' : 'Pneumatiques vérifiés avant chaque location'}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -251,8 +251,10 @@ export const VehicleDetailPage: React.FC<VehicleDetailPageProps> = ({
                 )}
                 <span className="text-xs text-slate-500 mt-1 block">
                   {currentLang === 'ar'
-                    ? 'شامل الضرائب والتأمين والكيلومترات غير المحدودة'
-                    : 'TTC, assurance tous risques & kilométrage illimité inclus'}
+                    ? 'السعر شامل الضرائب، الدفع عند الاستلام'
+                    : currentLang === 'en'
+                    ? 'Price incl. tax, payment on delivery'
+                    : 'Prix TTC, paiement à la livraison'}
                 </span>
               </div>
 

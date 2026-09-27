@@ -1,6 +1,6 @@
 import React from 'react';
 import { Logo } from './Logo';
-import { Phone, Mail, MessageCircle, MapPin, ShieldCheck, Linkedin, Facebook } from 'lucide-react';
+import { Phone, Mail, MessageCircle, ShieldCheck, Linkedin, Facebook } from 'lucide-react';
 import type { Language, LocationItem } from '../types/database';
 import { TRANSLATIONS, buildWhatsAppLink, getStaffTransportPath } from '../lib/translations';
 
@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer className="bg-[#15265A] text-white pt-16 pb-8 border-t-4 border-[#D92D3A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-12 border-b border-white/10">
           {/* Column 1: Brand & Presentation */}
           <div className="flex flex-col gap-4">
             <Logo variant="dark" showTagline={true} />
@@ -100,48 +100,7 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* Column 3: SOUBAICAR Agencies */}
-          <div>
-            <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-4 border-b border-white/10 pb-2 inline-block">
-              {t.footer.ourAgencies}
-            </h4>
-            <div className="space-y-4 text-xs text-slate-300">
-              {locations.map((loc) => (
-                <div key={loc.id} className="group">
-                  <button
-                    onClick={() => onNavigate(`/${currentLang}/agences/${loc.slug}`)}
-                    className="flex items-start gap-2 text-start font-semibold text-white group-hover:text-[#D92D3A] transition-colors cursor-pointer"
-                  >
-                    <MapPin className="w-3.5 h-3.5 text-[#D92D3A] shrink-0 mt-0.5" />
-                    <span>Agence SOUBAICAR {loc.name}</span>
-                  </button>
-                  <p className="text-[11px] text-slate-400 ms-5 mt-0.5 line-clamp-1">{loc.address}</p>
-                </div>
-              ))}
-              <div className="pt-2">
-                <button
-                  onClick={() => onNavigate(`/${currentLang}/location-voiture-dakhla`)}
-                  className="text-[11px] text-slate-400 hover:text-white underline block"
-                >
-                  {isRtl ? 'كراء السيارات في الداخلة (المطار والمدينة)' : 'Location voiture Dakhla (Aéroport & Ville)'}
-                </button>
-                <button
-                  onClick={() => onNavigate(`/${currentLang}/location-voiture-laayoune`)}
-                  className="text-[11px] text-slate-400 hover:text-white underline block mt-1"
-                >
-                  {isRtl ? 'كراء السيارات في العيون (المطار والمدينة)' : 'Location voiture Laâyoune (Aéroport Hassan 1er)'}
-                </button>
-                <button
-                  onClick={() => onNavigate(`/${currentLang}/location-voiture-boujdour`)}
-                  className="text-[11px] text-slate-400 hover:text-white underline block mt-1"
-                >
-                  {isRtl ? 'كراء السيارات في بوجدور' : 'Location voiture Boujdour (Centre & Côte)'}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Column 4: Contact & Direct Assistance */}
+          {/* Column 3: Contact & Direct Assistance */}
           <div className="min-w-0">
             <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-4 border-b border-white/10 pb-2 inline-block">
               {isRtl ? 'تواصل وحجز مباشر' : 'Contact & Réservations'}

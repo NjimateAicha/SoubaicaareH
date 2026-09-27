@@ -66,7 +66,7 @@ export const CorporateQuoteDetails: React.FC<CorporateQuoteDetailsProps> = ({ re
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500 font-medium">Téléphone :</span>
-                <span className="font-bold tabular-nums text-[#15265A]">{request.phone}</span>
+                <span className="font-bold tabular-nums text-[#15265A]">{request.phone || 'Non renseigné'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500 font-medium">Email :</span>
@@ -157,23 +157,27 @@ export const CorporateQuoteDetails: React.FC<CorporateQuoteDetailsProps> = ({ re
 
         {/* Footer Actions */}
         <div className="p-5 sm:p-6 border-t border-slate-100 bg-[#F6F7FA]/70 flex flex-wrap items-center gap-2">
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="py-2.5 px-4 bg-[#25D366] hover:bg-emerald-600 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
-          >
-            <MessageCircle className="w-4 h-4 fill-current" />
-            <span>WhatsApp</span>
-          </a>
+          {request.phone && (
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-2.5 px-4 bg-[#25D366] hover:bg-emerald-600 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
+            >
+              <MessageCircle className="w-4 h-4 fill-current" />
+              <span>WhatsApp</span>
+            </a>
+          )}
 
-          <a
-            href={`tel:${request.phone.replace(/[^0-9+]/g, '')}`}
-            className="py-2.5 px-4 bg-white hover:bg-slate-100 text-[#15265A] border border-slate-200 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5"
-          >
-            <Phone className="w-4 h-4 text-[#263B86]" />
-            <span>Appeler</span>
-          </a>
+          {request.phone && (
+            <a
+              href={`tel:${request.phone.replace(/[^0-9+]/g, '')}`}
+              className="py-2.5 px-4 bg-white hover:bg-slate-100 text-[#15265A] border border-slate-200 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5"
+            >
+              <Phone className="w-4 h-4 text-[#263B86]" />
+              <span>Appeler</span>
+            </a>
+          )}
 
           {request.email && (
             <a

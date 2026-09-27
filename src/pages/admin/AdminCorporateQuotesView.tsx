@@ -65,7 +65,7 @@ export const AdminCorporateQuotesView: React.FC<AdminCorporateQuotesViewProps> =
           {
             header: 'Téléphone',
             render: (r: CorporateQuoteRequest) => (
-              <span className="font-semibold text-slate-700 tabular-nums">{r.phone}</span>
+              <span className="font-semibold text-slate-700 tabular-nums">{r.phone || '—'}</span>
             ),
           },
           {
@@ -119,23 +119,27 @@ export const AdminCorporateQuotesView: React.FC<AdminCorporateQuotesViewProps> =
 
               return (
                 <div className="flex items-center justify-end gap-1.5">
-                  <a
-                    href={waLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 bg-[#25D366] hover:bg-emerald-600 text-white rounded-lg transition-colors"
-                    title="WhatsApp direct à l'entreprise"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5 fill-current" />
-                  </a>
+                  {r.phone && (
+                    <a
+                      href={waLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 bg-[#25D366] hover:bg-emerald-600 text-white rounded-lg transition-colors"
+                      title="WhatsApp direct à l'entreprise"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 fill-current" />
+                    </a>
+                  )}
 
-                  <a
-                    href={`tel:${r.phone.replace(/[^0-9+]/g, '')}`}
-                    className="p-1.5 bg-slate-100 hover:bg-slate-200 text-[#15265A] rounded-lg transition-colors"
-                    title="Appeler le contact"
-                  >
-                    <Phone className="w-3.5 h-3.5" />
-                  </a>
+                  {r.phone && (
+                    <a
+                      href={`tel:${r.phone.replace(/[^0-9+]/g, '')}`}
+                      className="p-1.5 bg-slate-100 hover:bg-slate-200 text-[#15265A] rounded-lg transition-colors"
+                      title="Appeler le contact"
+                    >
+                      <Phone className="w-3.5 h-3.5" />
+                    </a>
+                  )}
 
                   <button
                     type="button"

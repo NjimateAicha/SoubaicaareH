@@ -166,6 +166,41 @@ export const StaffTransportPage: React.FC<StaffTransportPageProps> = ({ currentL
         </div>
       </section>
 
+      {/* 2b. TRUST / PROMOTIONAL VISUAL */}
+      <section className="pb-16 sm:pb-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-[#F6F7FA] rounded-2xl border border-slate-200 shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+            <div className="relative min-h-[280px] lg:min-h-0 bg-[#15265A] p-4 sm:p-6 flex items-center justify-center">
+              <img
+                src={ASSET_IMAGES.corporatePromo}
+                alt={t.trust.title}
+                className="w-full h-full max-h-[420px] object-contain"
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className="p-8 sm:p-10 flex flex-col justify-center">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#D92D3A] mb-2 block">
+                {t.trust.kicker}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#15265A] mb-4">
+                {t.trust.title}
+              </h2>
+              <p className="text-sm text-[#667085] leading-relaxed mb-6">
+                {t.trust.text}
+              </p>
+              <a
+                href="#devis"
+                className="inline-flex items-center gap-2 self-start px-6 py-3 bg-[#D92D3A] hover:bg-[#b8222e] text-white font-bold text-sm rounded-xl shadow-md transition-all cursor-pointer"
+              >
+                <Send className="w-4 h-4" />
+                <span>{t.trust.cta}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. SERVICES GRID */}
       <section className="py-16 sm:py-20 bg-[#F6F7FA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -245,6 +280,32 @@ export const StaffTransportPage: React.FC<StaffTransportPageProps> = ({ currentL
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* 5b. FLEET VISUAL: coach + minibuses, illustrating the B2B staff-transport
+          service ahead of the fleet category list below. */}
+      <section className="py-16 sm:py-20 bg-[#F6F7FA] border-t border-slate-200/60">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+            <div className="p-8 sm:p-10 flex flex-col justify-center order-2 lg:order-1">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#15265A] mb-4">
+                {t.fleetVisual.title}
+              </h2>
+              <p className="text-sm text-[#667085] leading-relaxed">
+                {t.fleetVisual.text}
+              </p>
+            </div>
+            <div className="relative min-h-[240px] lg:min-h-[320px] order-1 lg:order-2">
+              <img
+                src={ASSET_IMAGES.staffTransportFleet}
+                alt={t.fleetVisual.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
+            </div>
           </div>
         </div>
       </section>

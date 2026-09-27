@@ -5,18 +5,15 @@ import {
   Car,
   User,
   Mail,
-  Phone,
   Globe,
-  FileText,
   CheckCircle2,
   MessageCircle,
   ShieldCheck,
-  ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 import type { LocationItem, Vehicle, Reservation, Language } from '../types/database';
 import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
 import { DataService, isSupabaseConfigured } from '../lib/supabase';
+import { PhonePrefixInput, DEFAULT_PHONE_PREFIX } from '../components/PhonePrefixInput';
 
 interface BookingPageProps {
   locations: LocationItem[];
@@ -78,6 +75,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [phonePrefix, setPhonePrefix] = useState(DEFAULT_PHONE_PREFIX);
   const [phone, setPhone] = useState('');
   const [country, setCountry] = useState('Maroc');
   const [message, setMessage] = useState('');
@@ -114,7 +112,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({
       const res = await DataService.createReservation({
         customer_name: fullName,
         email: email || 'non-fourni@client.com',
-        phone,
+        phone: `${phonePrefix} ${phone}`.trim(),
         country: country || 'Maroc',
         vehicle_id: selectedVehicleId,
         vehicle_name: selectedVehicleObj?.name || '',
@@ -238,17 +236,10 @@ export const BookingPage: React.FC<BookingPageProps> = ({
           /* Booking Form */
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             {/* Top reassuring banner */}
-            <div className="bg-[#15265A] text-white p-4 sm:px-8 flex flex-wrap items-center justify-between gap-4 text-xs">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#D92D3A]" />
-                <span className="font-semibold">
-                  {currentLang === 'ar'
-                    ? 'كيلومترات غير محدودة + تأمين شامل + سائق ثانٍ مجاناً'
-                    : 'Kilométrage illimité + Assurance tous risques + 2ème conducteur gratuit'}
-                </span>
-              </div>
-              <span className="text-slate-300">
-                {currentLang === 'ar' ? 'الدفع عند الاستلام' : 'Paiement à la livraison'}
+            <div className="bg-[#15265A] text-white p-4 sm:px-8 flex items-center justify-center gap-2 text-xs">
+              <ShieldCheck className="w-4 h-4 text-[#D92D3A]" />
+              <span className="font-semibold">
+                {currentLang === 'ar' ? 'الدفع عند الاستلام' : currentLang === 'en' ? 'Payment on delivery' : 'Paiement à la livraison'}
               </span>
             </div>
 
@@ -397,19 +388,15 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                     <label className="block text-xs font-bold text-[#15265A] uppercase tracking-wider mb-2">
                       {t.reservationForm.phone} *
                     </label>
-                    <div className="relative">
-                      <Phone className="w-4 h-4 text-[#263B86] absolute top-3.5 start-3 pointer-events-none" />
-                      <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-medium text-sm rounded-xl py-2.5 ps-9 pe-4 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden"
-                        required
-                      />
-                      <p className="text-[10px] text-slate-400 mt-1 ps-1">
-                        {currentLang === 'ar' ? 'مثال: 600 000 000 212+' : 'Format : +212 6XX XXX XXX'}
-                      </p>
-                    </div>
+                    <PhonePrefixInput
+                      currentLang={currentLang}
+                      prefix={phonePrefix}
+                      onPrefixChange={setPhonePrefix}
+                      number={phone}
+                      onNumberChange={setPhone}
+                      placeholder={currentLang === 'ar' ? 'مثال: 600 000 6' : 'Ex : 6XX XXX XXX'}
+                      required
+                    />
                   </div>
                 </div>
 
@@ -489,7 +476,13 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                   className="w-full sm:w-auto py-4 px-6 bg-[#25D366] hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   <MessageCircle className="w-5 h-5 fill-current" />
-                  <span>WhatsApp direct</span>
+                  <span>
+                    {currentLang === 'ar'
+                      ? 'اطلبوا مباشرة عبر واتساب'
+                      : currentLang === 'en'
+                      ? 'Request Directly on WhatsApp'
+                      : 'Demandez directement via WhatsApp'}
+                  </span>
                 </a>
               </div>
             </form>
