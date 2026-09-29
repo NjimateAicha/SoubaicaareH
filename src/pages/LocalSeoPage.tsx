@@ -65,14 +65,14 @@ export const LocalSeoPage: React.FC<LocalSeoPageProps> = ({
         <div className="bg-[#15265A] text-white rounded-2xl p-8 sm:p-12 mb-12 relative overflow-hidden">
           <div className="relative z-10 max-w-3xl">
             <span className="bg-[#D92D3A] text-white text-xs font-bold px-3 py-1 rounded-md mb-4 inline-block uppercase">
-              {isAr ? `وكالة سوبيكار الرسمية في ${cityName}` : `Agence Officielle SOUBAICAR ${cityName}`}
+              {isAr ? `وكالة السباعي الرسمية في ${cityName}` : `Agence Officielle SOUBAICAR ${cityName}`}
             </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
               {currentHeading}
             </h1>
             <p className="text-sm sm:text-base text-slate-200 mb-8 leading-relaxed">
               {isAr
-                ? `استأجر سيارتك في ${cityName} بكل أمان مع سوبيكار: تسليم مجاني في المطار، الدفع عند الاستلام وخدمة محلية سريعة التجاوب.`
+                ? `استأجر سيارتك في ${cityName} بكل أمان مع السباعي: تسليم مجاني في المطار، الدفع عند الاستلام وخدمة محلية سريعة التجاوب.`
                 : isEn
                 ? `Book your vehicle in ${cityName} with confidence: free airport delivery, payment on delivery and a responsive local team.`
                 : `Réservez votre véhicule à ${cityName} en toute sérénité : livraison aéroport 24/7, paiement à la livraison et un service local réactif.`}
@@ -176,7 +176,7 @@ export const LocalSeoPage: React.FC<LocalSeoPageProps> = ({
               </h4>
               <p className="text-slate-600">
                 {isAr
-                  ? 'يكفي تزويدنا برقم رحلتكم عند الحجز أو عبر واتساب، وسيكون موظف سوبيكار في انتظاركم عند بوابة الخروج.'
+                  ? 'يكفي تزويدنا برقم رحلتكم عند الحجز أو عبر واتساب، وسيكون موظف السباعي في انتظاركم عند بوابة الخروج.'
                   : 'Il vous suffit de nous communiquer votre numéro de vol lors de la réservation ou par WhatsApp. Notre agent vous accueillera à la sortie du terminal.'}
               </p>
             </div>
@@ -187,7 +187,7 @@ export const LocalSeoPage: React.FC<LocalSeoPageProps> = ({
               </h4>
               <p className="text-slate-600">
                 {isAr
-                  ? `يتم الدفع عند استلام السيارة لدى وكالة سوبيكار ${cityName}، حسب الطرق المتاحة.`
+                  ? `يتم الدفع عند استلام السيارة لدى وكالة السباعي ${cityName}، حسب الطرق المتاحة.`
                   : isEn
                   ? `Payment is made when you pick up the vehicle at the SOUBAICAR ${cityName} branch, according to the available payment methods.`
                   : `Le paiement s'effectue à la livraison du véhicule auprès de l'agence SOUBAICAR ${cityName}, selon les moyens de paiement disponibles.`}

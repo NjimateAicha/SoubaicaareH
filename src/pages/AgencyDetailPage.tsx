@@ -106,7 +106,7 @@ export const AgencyDetailPage: React.FC<AgencyDetailPageProps> = ({
                   SOUBAICAR Maroc
                 </span>
                 <h1 className="text-3xl sm:text-4xl font-black">
-                  {currentLang === 'ar' ? `وكالة سوبيكار ${location.name}` : `Agence SOUBAICAR ${location.name}`}
+                  {currentLang === 'ar' ? `وكالة السباعي ${location.name}` : `Agence SOUBAICAR ${location.name}`}
                 </h1>
               </div>
             </div>

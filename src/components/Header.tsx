@@ -43,20 +43,20 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-200/80 shadow-xs transition-colors">
       {/* Top micro bar with contact info */}
-      <div className="bg-[#15265A] text-white text-xs py-1.5 px-4 sm:px-8 border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
+      <div className="bg-[#15265A] text-white text-base py-3 px-4 sm:px-8 border-b border-white/10">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-x-6 gap-y-1.5">
           <a
             href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
-            className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors"
           >
-            <Phone className="w-3 h-3 text-[#D92D3A]" />
+            <Phone className="w-5 h-5 text-[#D92D3A]" />
             <span className="font-medium tabular-nums">{phoneNumber}</span>
           </a>
           <a
             href={`mailto:${email}`}
-            className="flex items-center gap-1.5 text-slate-200 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors"
           >
-            <Mail className="w-3 h-3 text-[#D92D3A]" />
+            <Mail className="w-5 h-5 text-[#D92D3A]" />
             <span className="font-medium">{email}</span>
           </a>
         </div>

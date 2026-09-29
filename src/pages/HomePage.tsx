@@ -20,7 +20,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import type { LocationItem, Vehicle, SiteSettings, Language } from '../types/database';
-import { TRANSLATIONS, buildWhatsAppLink, getStaffTransportPath } from '../lib/translations';
+import { TRANSLATIONS, GOOGLE_REVIEWS, buildWhatsAppLink, getStaffTransportPath } from '../lib/translations';
 import { ASSET_IMAGES } from '../lib/initialData';
 
 interface HomePageProps {
@@ -41,12 +41,10 @@ export const HomePage: React.FC<HomePageProps> = ({
   const t = TRANSLATIONS[currentLang];
   const isRtl = currentLang === 'ar';
 
-  const heroTitle =
-    currentLang === 'ar'
-      ? settings.hero_title_ar || t.hero.title
-      : currentLang === 'en'
-      ? settings.hero_title_en || t.hero.title
-      : settings.hero_title_fr || t.hero.title;
+  // The hero title is intentionally sourced from the code translations only,
+  // not from Supabase site_settings (which has no Admin UI field for it and
+  // was pinning a stale value indefinitely) - this is the single source of truth.
+  const heroTitle = t.hero.title;
 
   const heroSubtitle =
     currentLang === 'ar'
@@ -59,21 +57,23 @@ export const HomePage: React.FC<HomePageProps> = ({
   const displayFleet = featuredVehicles.length > 0 ? featuredVehicles : vehicles.slice(0, 3);
   const GOOGLE_REVIEWS_URL = 'https://share.google/TUD01udlreI3hfNFu';
 
-  const INITIAL_REVIEWS_COUNT = 3;
+  // Review content is language-independent by design (shown verbatim in its
+  // original language) — only the section's UI labels below are localized.
+  const INITIAL_REVIEWS_COUNT = 6;
   const [showAllReviews, setShowAllReviews] = useState(false);
   const visibleReviews = showAllReviews
-    ? t.googleReviews.items
-    : t.googleReviews.items.slice(0, INITIAL_REVIEWS_COUNT);
+    ? GOOGLE_REVIEWS
+    : GOOGLE_REVIEWS.slice(0, INITIAL_REVIEWS_COUNT);
 
   const whatsappHeroHref = buildWhatsAppLink(settings.whatsapp, '', '', '', '', currentLang);
 
   // Icon mapping for the verified benefits
-  const benefitIcons = [CreditCard, Disc, Car, UserCheck, Headphones];
+  const benefitIcons = [CreditCard, Disc, Car, UserCheck, Headphones, ShieldCheck];
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-[620px] lg:min-h-[700px] flex items-center bg-[#15265A] text-white overflow-hidden">
+      <section className="relative min-h-[620px] lg:min-h-[780px] flex items-center bg-[#15265A] text-white overflow-hidden">
         {/* Background automotive / southern Morocco visual */}
         <div className="absolute inset-0 z-0">
           <img
@@ -94,10 +94,10 @@ export const HomePage: React.FC<HomePageProps> = ({
           />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 w-full">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-32 w-full">
           <div className="max-w-3xl">
             {/* Headline */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight md:leading-tight mb-6" style={{ textWrap: 'balance' }}>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight text-white leading-tight md:leading-tight mb-6" style={{ textWrap: 'balance' }}>
               {heroTitle}
             </h1>
 
@@ -275,14 +275,14 @@ export const HomePage: React.FC<HomePageProps> = ({
           counts/dates and quotes as left on Google. */}
       <section className="py-20 bg-[#F6F7FA] border-t border-slate-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="text-center max-w-2xl mx-auto mb-14">
             <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center mx-auto mb-6">
               <Star className="w-7 h-7 text-[#263B86]" fill="currentColor" />
             </div>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#D92D3A] mb-2 block">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#D92D3A] mb-3 block">
               {t.googleReviews.kicker}
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#15265A] mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#15265A] mb-5">
               {t.googleReviews.title}
             </h2>
             <p className="text-sm sm:text-base text-[#667085] leading-relaxed">
@@ -302,14 +302,16 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </p>
                 <div className="pt-3 border-t border-slate-100">
                   <span className="block text-sm font-bold text-[#15265A]">{review.name}</span>
-                  <span className="block text-xs text-[#667085] mt-0.5">{review.meta}</span>
+                  {review.meta && (
+                    <span className="block text-xs text-[#667085] mt-0.5">{review.meta}</span>
+                  )}
                 </div>
               </div>
             ))}
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
-            {t.googleReviews.items.length > INITIAL_REVIEWS_COUNT && (
+            {GOOGLE_REVIEWS.length > INITIAL_REVIEWS_COUNT && (
               <button
                 onClick={() => setShowAllReviews((prev) => !prev)}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-100 border border-slate-200 text-[#15265A] font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer"

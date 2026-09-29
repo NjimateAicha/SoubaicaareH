@@ -309,6 +309,21 @@ export const DataService = {
         throw error;
       }
 
+      // The reservation is now safely saved — that is the operation the
+      // customer depends on. Notifying the business by email is a secondary,
+      // best-effort step: any failure here is only logged and must never
+      // surface as a booking failure or create a duplicate reservation.
+      try {
+        const { error: notifyError } = await supabase.functions.invoke('send-reservation-email', {
+          body: payload,
+        });
+        if (notifyError) {
+          console.error('RESERVATION_EMAIL_NOTIFY_ERROR', notifyError);
+        }
+      } catch (notifyError) {
+        console.error('RESERVATION_EMAIL_NOTIFY_ERROR', notifyError);
+      }
+
       return payload;
     }
 

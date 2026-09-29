@@ -45,10 +45,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-xs font-bold uppercase tracking-wider text-[#D92D3A] mb-2 block">
-            {currentLang === 'ar' ? 'تعرف على سوبيكار' : 'À Propos de Nous'}
+            {currentLang === 'ar' ? 'تعرف على السباعي' : 'À Propos de Nous'}
           </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#15265A] mb-4">
-            {currentLang === 'ar' ? 'سوبيكار SOUBAICAR في جنوب المغرب' : 'SOUBAICAR : Votre Partenaire Automobile dans le Sud'}
+            {currentLang === 'ar' ? 'السباعي SOUBAICAR في جنوب المغرب' : 'SOUBAICAR : Votre Partenaire Automobile dans le Sud'}
           </h1>
           <p className="text-sm sm:text-base text-[#667085] leading-relaxed">
             {currentLang === 'ar'
@@ -81,7 +81,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div className="space-y-4 text-xs sm:text-sm text-[#1C2434] leading-relaxed">
                 <p>
                   {currentLang === 'ar'
-                    ? 'تأسست سوبيكار سنة 1989 وتطورت عبر عقود من الخبرة لتصبح شريكاً موثوقاً في كراء السيارات والنقل المهني في جنوب المغرب.'
+                    ? 'تأسست السباعي سنة 1989 وتطورت عبر عقود من الخبرة لتصبح شريكاً موثوقاً في كراء السيارات والنقل المهني في جنوب المغرب.'
                     : 'Depuis 1989, SOUBAICAR s’est développée au fil des décennies pour devenir un acteur de référence dans la location de véhicules et le transport professionnel au Sud du Maroc.'}
                 </p>
                 <p>

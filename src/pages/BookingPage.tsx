@@ -13,7 +13,7 @@ import {
 import type { LocationItem, Vehicle, Reservation, Language } from '../types/database';
 import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
 import { DataService, isSupabaseConfigured } from '../lib/supabase';
-import { PhonePrefixInput, DEFAULT_PHONE_PREFIX } from '../components/PhonePrefixInput';
+import { PhonePrefixInput, DEFAULT_COUNTRY_ISO2, getDialCode } from '../components/PhonePrefixInput';
 
 interface BookingPageProps {
   locations: LocationItem[];
@@ -75,7 +75,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [phonePrefix, setPhonePrefix] = useState(DEFAULT_PHONE_PREFIX);
+  const [phoneCountry, setPhoneCountry] = useState(DEFAULT_COUNTRY_ISO2);
   const [phone, setPhone] = useState('');
   const [country, setCountry] = useState('Maroc');
   const [message, setMessage] = useState('');
@@ -112,7 +112,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({
       const res = await DataService.createReservation({
         customer_name: fullName,
         email: email || 'non-fourni@client.com',
-        phone: `${phonePrefix} ${phone}`.trim(),
+        phone: `${getDialCode(phoneCountry)} ${phone}`.trim(),
         country: country || 'Maroc',
         vehicle_id: selectedVehicleId,
         vehicle_name: selectedVehicleObj?.name || '',
@@ -390,8 +390,8 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                     </label>
                     <PhonePrefixInput
                       currentLang={currentLang}
-                      prefix={phonePrefix}
-                      onPrefixChange={setPhonePrefix}
+                      countryIso2={phoneCountry}
+                      onCountryChange={setPhoneCountry}
                       number={phone}
                       onNumberChange={setPhone}
                       placeholder={currentLang === 'ar' ? 'مثال: 600 000 6' : 'Ex : 6XX XXX XXX'}

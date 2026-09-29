@@ -13,7 +13,7 @@ export const TRANSLATIONS = {
       staffTransport: 'Transport du personnel',
     },
     hero: {
-      title: 'Location de voitures à Laâyoune et Dakhla',
+      title: 'Location de voitures SOUBAI à Laâyoune et Dakhla',
       subtitle: 'Une flotte fiable et adaptée à tous vos déplacements professionnels, personnels et touristiques dans le Sud du Maroc.',
       ctaPrimary: 'Réserver maintenant',
       ctaSecondary: 'Voir notre flotte',
@@ -52,6 +52,10 @@ export const TRANSLATIONS = {
         {
           title: 'Service client réactif',
           desc: 'Une équipe locale disponible à tout moment par téléphone et WhatsApp.',
+        },
+        {
+          title: 'Assurance tous risques',
+          desc: 'Couverture complète et assistance routière 24h/24 pour rouler l’esprit serein.',
         },
       ],
     },
@@ -104,48 +108,6 @@ export const TRANSLATIONS = {
       cta: 'Voir tous les avis sur Google',
       showMore: 'Voir plus d’avis',
       showLess: 'Voir moins d’avis',
-      items: [
-        {
-          name: 'Hasna EL HAMZAOUI',
-          meta: '1 avis · il y a 7 mois',
-          text: 'Je recommande vivement la sté Soubai car. Le service est très professionnel. Le véhicule était propre, et conforme à la description. On a été livré à l’aéroport et la ponctualité était au rendez-vous.',
-        },
-        {
-          name: 'Jean Luc DARTIAILH',
-          meta: '7 avis · il y a 4 mois',
-          text: 'Excellente prestation. Aimable et ponctuel. Les véhicules sont d’excellente qualité et les prix très raisonnables.',
-        },
-        {
-          name: 'Elaissy ouarda',
-          meta: '4 avis · il y a 5 mois',
-          text: 'J’ai le plaisir de collaborer avec Soubai Car, grande rigueur, respect des délais et excellente communication. Toujours disponible pour trouver des solutions. Je recommande.',
-        },
-        {
-          name: 'Jihane Derhem',
-          meta: '8 avis · il y a 5 mois',
-          text: 'Très professionnel et vraiment à la hauteur de mes attentes. Je recommande fortement.',
-        },
-        {
-          name: 'christian van puymbrouck',
-          meta: 'Local Guide · 122 avis · 146 photos · il y a 3 ans',
-          text: '2ème séjour au Maroc. J’ai de nouveau loué mon véhicule auprès de cette société. Je n’ai qu’à m’en féliciter. Attendu à ma sortie d’avion. Véhicule neuf.',
-        },
-        {
-          name: 'Jérôme DUPUY',
-          meta: '4 avis · il y a 3 ans',
-          text: 'Très bonne agence de location de voitures, service au top, réactif, échanges possibles via WhatsApp. Une personne nous attend à la sortie de l’aéroport pour nous remettre la voiture et le retour se fait également à l’aéroport. Je recommande, c’est parfait.',
-        },
-        {
-          name: 'Driss Mahjabi',
-          meta: '3 avis · il y a 2 ans',
-          text: 'Qualité vraiment irréprochable de la prestation et veille à la satisfaction du client de la réception au retour du véhicule. Je recommande vivement.',
-        },
-        {
-          name: 'Mostafa Hamidallah',
-          meta: '2 avis · il y a 3 ans',
-          text: 'Vu mes multiples voyages et en toute crédibilité et transparence, je ne peux que dire merci infiniment à tout le personnel de SOUBAICAR pour votre accueil chaleureux.',
-        },
-      ],
     },
     finalCta: {
       title: 'Besoin d’un véhicule ?',
@@ -350,7 +312,7 @@ export const TRANSLATIONS = {
       staffTransport: 'Staff Transportation',
     },
     hero: {
-      title: 'Car Rental in Laâyoune and Dakhla',
+      title: 'SOUBAI Car Rental in Laâyoune and Dakhla',
       subtitle: 'A reliable fleet tailored to all your business, personal, and leisure travels across Southern Morocco.',
       ctaPrimary: 'Book Now',
       ctaSecondary: 'View Our Fleet',
@@ -389,6 +351,10 @@ export const TRANSLATIONS = {
         {
           title: 'Responsive Customer Service',
           desc: 'Local team reachable round the clock via phone and WhatsApp.',
+        },
+        {
+          title: 'Comprehensive Insurance',
+          desc: 'Full coverage and 24/7 roadside assistance for relaxed driving.',
         },
       ],
     },
@@ -441,48 +407,6 @@ export const TRANSLATIONS = {
       cta: 'View all reviews on Google',
       showMore: 'See more reviews',
       showLess: 'See fewer reviews',
-      items: [
-        {
-          name: 'Hasna EL HAMZAOUI',
-          meta: '1 review · 7 months ago',
-          text: 'I highly recommend Soubai Car. The service is very professional. The vehicle was clean and matched the description. We were dropped off at the airport and punctuality was spot on.',
-        },
-        {
-          name: 'Jean Luc DARTIAILH',
-          meta: '7 reviews · 4 months ago',
-          text: 'Excellent service. Friendly and punctual. The vehicles are of excellent quality and the prices are very reasonable.',
-        },
-        {
-          name: 'Elaissy ouarda',
-          meta: '4 reviews · 5 months ago',
-          text: 'I’m pleased to work with Soubai Car: great rigor, on-time delivery and excellent communication. Always available to find solutions. I recommend them.',
-        },
-        {
-          name: 'Jihane Derhem',
-          meta: '8 reviews · 5 months ago',
-          text: 'Very professional and truly lived up to my expectations. I highly recommend.',
-        },
-        {
-          name: 'christian van puymbrouck',
-          meta: 'Local Guide · 122 reviews · 146 photos · 3 years ago',
-          text: '2nd stay in Morocco. I rented a vehicle from this company again. I have nothing but praise. They were waiting for me as I got off the plane. Brand new vehicle.',
-        },
-        {
-          name: 'Jérôme DUPUY',
-          meta: '4 reviews · 3 years ago',
-          text: 'Very good car rental agency, top-notch and responsive service, exchanges possible via WhatsApp. Someone waits for us at the airport exit to hand over the car, and the return is also done at the airport. I recommend it, it’s perfect.',
-        },
-        {
-          name: 'Driss Mahjabi',
-          meta: '3 reviews · 2 years ago',
-          text: 'Truly flawless quality of service, with attention to customer satisfaction from pick-up to vehicle return. I highly recommend.',
-        },
-        {
-          name: 'Mostafa Hamidallah',
-          meta: '2 reviews · 3 years ago',
-          text: 'Given my many trips, and in all credibility and transparency, I can only say a huge thank you to the entire SOUBAICAR staff for your warm welcome.',
-        },
-      ],
     },
     finalCta: {
       title: 'Need a Car in Southern Morocco?',
@@ -687,7 +611,7 @@ export const TRANSLATIONS = {
       staffTransport: 'نقل الموظفين',
     },
     hero: {
-      title: 'كراء السيارات في العيون والداخلة',
+      title: 'كراء سيارات السباعي في العيون والداخلة',
       subtitle: 'أسطول موثوق وملائم لجميع تنقلاتكم المهنية والشخصية والسياحية في جنوب المملكة المغربية.',
       ctaPrimary: 'احجز الآن',
       ctaSecondary: 'استعرض سياراتنا',
@@ -704,7 +628,7 @@ export const TRANSLATIONS = {
       search: 'التحقق من التوفر',
     },
     whyUs: {
-      title: 'لماذا تختار سوبيكار SOUBAICAR؟',
+      title: 'لماذا تختار السباعي SOUBAICAR؟',
       subtitle: 'التزامات واضحة وضمانات معتمدة لضمان راحتكم وسلامتكم أثناء السفر.',
       benefits: [
         {
@@ -726,6 +650,10 @@ export const TRANSLATIONS = {
         {
           title: 'خدمة زبائن سريعة التجاوب',
           desc: 'فريق محلي متواجد دائماً للإجابة الفورية عبر الهاتف والواتساب.',
+        },
+        {
+          title: 'تأمين شامل لجميع المخاطر',
+          desc: 'تغطية متكاملة ومساعدة على الطريق على مدار 24 ساعة لقيادة هادئة.',
         },
       ],
     },
@@ -762,7 +690,7 @@ export const TRANSLATIONS = {
     },
     agencies: {
       title: 'وكالاتنا في جنوب المغرب',
-      subtitle: 'سوبيكار تستقبلكم في 3 وكالات رسمية ومجهزة في العيون، بوجدور والداخلة.',
+      subtitle: 'السباعي تستقبلكم في 3 وكالات رسمية ومجهزة في العيون، بوجدور والداخلة.',
       explore: 'تفاصيل الوكالة',
       call: 'اتصال',
       airportNotice: 'توصيل مجاني إلى المطار عند الطلب المسبق',
@@ -778,48 +706,6 @@ export const TRANSLATIONS = {
       cta: 'مشاهدة جميع التقييمات على Google',
       showMore: 'مشاهدة المزيد من التقييمات',
       showLess: 'عرض أقل',
-      items: [
-        {
-          name: 'Hasna EL HAMZAOUI',
-          meta: 'تقييم واحد · قبل 7 أشهر',
-          text: 'أنصح بشدة بشركة سوبي كار. الخدمة احترافية جداً. كانت السيارة نظيفة ومطابقة للوصف. تم تسليمنا إياها في المطار وكانت الدقة في الموعد حاضرة.',
-        },
-        {
-          name: 'Jean Luc DARTIAILH',
-          meta: '7 تقييمات · قبل 4 أشهر',
-          text: 'خدمة ممتازة. ودودون وفي الموعد المحدد. السيارات ذات جودة ممتازة والأسعار معقولة جداً.',
-        },
-        {
-          name: 'Elaissy ouarda',
-          meta: '4 تقييمات · قبل 5 أشهر',
-          text: 'يسعدني التعامل مع سوبي كار، دقة كبيرة واحترام للآجال وتواصل ممتاز. متواجدون دائماً لإيجاد الحلول. أنصح بهم.',
-        },
-        {
-          name: 'Jihane Derhem',
-          meta: '8 تقييمات · قبل 5 أشهر',
-          text: 'احترافية عالية وفاقت توقعاتي فعلاً. أنصح بشدة.',
-        },
-        {
-          name: 'christian van puymbrouck',
-          meta: 'مرشد محلي · 122 تقييماً · 146 صورة · قبل 3 سنوات',
-          text: 'إقامتي الثانية في المغرب. استأجرت سيارة من هذه الشركة مجدداً ولا يسعني إلا أن أثني عليها. كانوا في انتظاري عند خروجي من الطائرة. سيارة جديدة.',
-        },
-        {
-          name: 'Jérôme DUPUY',
-          meta: '4 تقييمات · قبل 3 سنوات',
-          text: 'وكالة كراء سيارات ممتازة، خدمة في القمة وسريعة الاستجابة، مع إمكانية التواصل عبر واتساب. شخص ينتظرنا عند خروجنا من المطار لتسليم السيارة، والإرجاع يتم أيضاً في المطار. أنصح بها، كل شيء مثالي.',
-        },
-        {
-          name: 'Driss Mahjabi',
-          meta: '3 تقييمات · قبل سنتين',
-          text: 'جودة الخدمة لا تشوبها شائبة فعلاً، مع اهتمام برضا الزبون من الاستلام إلى إرجاع السيارة. أنصح بشدة.',
-        },
-        {
-          name: 'Mostafa Hamidallah',
-          meta: 'تقييمان · قبل 3 سنوات',
-          text: 'نظراً لتنقلاتي المتعددة، وبكل مصداقية وشفافية، لا يسعني إلا أن أشكر بشدة جميع موظفي سوبيكار على استقبالكم الحار.',
-        },
-      ],
     },
     finalCta: {
       title: 'هل تحتاج إلى سيارة؟',
@@ -829,12 +715,12 @@ export const TRANSLATIONS = {
       callBtn: 'اتصلوا بنا مباشرة',
     },
     footer: {
-      aboutBrand: 'سوبيكار SOUBAICAR هي شركتكم الموثوقة لكراء السيارات في المغرب، بتواجد قوي في العيون، بوجدور والداخلة.',
+      aboutBrand: 'السباعي SOUBAICAR هي شركتكم الموثوقة لكراء السيارات في المغرب، بتواجد قوي في العيون، بوجدور والداخلة.',
       quickLinks: 'روابط سريعة',
       ourAgencies: 'وكالاتنا',
       legalNotice: 'الشروط القانونية',
       privacyPolicy: 'سياسة الخصوصية',
-      rights: 'جميع الحقوق محفوظة. سوبيكار SOUBAICAR.',
+      rights: 'جميع الحقوق محفوظة. السباعي SOUBAICAR.',
       phone: 'الهاتف',
       email: 'البريد الإلكتروني',
       whatsapp: 'واتساب',
@@ -857,7 +743,7 @@ export const TRANSLATIONS = {
       submitBtn: 'إرسال طلب الحجز',
       submitting: 'جاري الإرسال...',
       successTitle: 'تم إرسال طلبك بنجاح!',
-      successMessage: 'شكراً لثقتكم. سيتواصل معكم فريق سوبيكار سريعاً لتأكيد تفاصيل العقد.',
+      successMessage: 'شكراً لثقتكم. سيتواصل معكم فريق السباعي سريعاً لتأكيد تفاصيل العقد.',
       whatsappDirectBooking: 'التأكيد السريع عبر واتساب',
       newBookingBtn: 'إجراء حجز آخر',
     },
@@ -869,10 +755,10 @@ export const TRANSLATIONS = {
       contactAgency: 'استفسر عبر واتساب',
     },
     staffTransport: {
-      metaTitle: 'نقل الموظفين في العيون وبوجدور والداخلة | سوبيكار',
-      metaDescription: 'ترافق سوبيكار الشركات في نقل موظفيها في العيون وبوجدور والداخلة: نقل مكوكي، الأوراش، تنقلات مهنية وسيارات مع سائق.',
+      metaTitle: 'نقل الموظفين في العيون وبوجدور والداخلة | السباعي',
+      metaDescription: 'ترافق السباعي الشركات في نقل موظفيها في العيون وبوجدور والداخلة: نقل مكوكي، الأوراش، تنقلات مهنية وسيارات مع سائق.',
       hero: {
-        kicker: 'خدمة سوبيكار للشركات',
+        kicker: 'خدمة السباعي للشركات',
         h1: 'نقل الموظفين في العيون وبوجدور والداخلة',
         subtitle: 'حل تنقل مهني مخصص للشركات وفرق الأوراش والموظفين المتنقلين في جنوب المغرب.',
         ctaPrimary: 'اطلب عرض سعر',
@@ -884,13 +770,13 @@ export const TRANSLATIONS = {
         paragraphs: [
           'في مناطق العيون وبوجدور والداخلة، يشكل تنقل الموظفين رهاناً مهماً بالنسبة للشركات، لا سيما الشركات الصناعية وشركات البناء وشركات الطاقة ومكاتب الدراسات والمقاولين العاملين في مواقع نائية.',
           'عندما تحتاج الفرق إلى التنقل يومياً بين مكان إقامتها والمكاتب وقواعد الحياة والأوراش أو المواقع الصناعية، فإن توفر حل موثوق ومنظم لنقل الموظفين يسهل التدبير اليومي للعمليات.',
-          'ترافق سوبيكار الشركات في احتياجاتها المتعلقة بالتنقل المهني في العيون وبوجدور والداخلة، بحلول مكيفة مع إكراهات وجداول كل مؤسسة.',
+          'ترافق السباعي الشركات في احتياجاتها المتعلقة بالتنقل المهني في العيون وبوجدور والداخلة، بحلول مكيفة مع إكراهات وجداول كل مؤسسة.',
         ],
       },
       trust: {
         kicker: 'لماذا تثقون بنا',
         title: 'عرض مصمم خصيصاً للشركات في جنوب المغرب',
-        text: 'تقدم سوبيكار حلول كراء ونقل مرنة لمواكبة الشركات في العيون وبوجدور والداخلة في تنقلاتها المهنية.',
+        text: 'تقدم السباعي حلول كراء ونقل مرنة لمواكبة الشركات في العيون وبوجدور والداخلة في تنقلاتها المهنية.',
         cta: 'اطلب عرض سعر',
       },
       servicesGrid: {
@@ -920,7 +806,7 @@ export const TRANSLATIONS = {
         },
         dakhla: {
           title: 'نقل الموظفين في الداخلة',
-          text: 'في الداخلة، تؤمن سوبيكار نقل الموظفين والتقنيين والأطر وفرق المهام بين المطار والفنادق والمكاتب ومواقع العمل وأماكن التدخل.',
+          text: 'في الداخلة، تؤمن السباعي نقل الموظفين والتقنيين والأطر وفرق المهام بين المطار والفنادق والمكاتب ومواقع العمل وأماكن التدخل.',
         },
       },
       whyOutsource: {
@@ -947,7 +833,7 @@ export const TRANSLATIONS = {
       },
       fleetVisual: {
         title: 'حلول مصممة حسب فرقكم',
-        text: 'حافلات، حافلات صغيرة (ميني باص) وسيارات مع سائق: تكيّف سوبيكار وسائل النقل لديها حسب احتياجات الشركات وعدد الموظفين والمسارات الواجب تنظيمها في جنوب المغرب.',
+        text: 'حافلات، حافلات صغيرة (ميني باص) وسيارات مع سائق: تكيّف السباعي وسائل النقل لديها حسب احتياجات الشركات وعدد الموظفين والمسارات الواجب تنظيمها في جنوب المغرب.',
       },
       fleet: {
         title: 'أسطول ملائم للتنقلات المهنية',
@@ -963,7 +849,7 @@ export const TRANSLATIONS = {
       },
       localExpertise: {
         title: 'معرفة ميدانية بجنوب المغرب',
-        text: 'تتواجد سوبيكار في العيون وبوجدور والداخلة، مما يتيح لها فهماً ميدانياً أفضل للمسافات والجداول والإكراهات الخاصة بكل منطقة في جنوب المغرب.',
+        text: 'تتواجد السباعي في العيون وبوجدور والداخلة، مما يتيح لها فهماً ميدانياً أفضل للمسافات والجداول والإكراهات الخاصة بكل منطقة في جنوب المغرب.',
       },
       customSolution: {
         title: 'نقل موظفين مصمم حسب الطلب',
@@ -992,7 +878,7 @@ export const TRANSLATIONS = {
         submitBtn: 'اطلب عرض سعري',
         submitting: 'جاري الإرسال...',
         successTitle: 'تم إرسال طلبكم بنجاح!',
-        successMessage: 'شكراً لثقتكم. سيتواصل معكم فريق سوبيكار في أقرب وقت لدراسة طلبكم.',
+        successMessage: 'شكراً لثقتكم. سيتواصل معكم فريق السباعي في أقرب وقت لدراسة طلبكم.',
         newRequestBtn: 'إرسال طلب آخر',
         required: 'هذا الحقل مطلوب',
         contactInfoTitle: 'تواصل معنا',
@@ -1000,7 +886,7 @@ export const TRANSLATIONS = {
       homepage: {
         kicker: 'حل للشركات',
         title: 'نقل الموظفين للشركات',
-        text: 'ترافق سوبيكار الشركات في العيون وبوجدور والداخلة بحلول نقل مكيفة مع الموظفين وفرق الأوراش والتنقلات المهنية.',
+        text: 'ترافق السباعي الشركات في العيون وبوجدور والداخلة بحلول نقل مكيفة مع الموظفين وفرق الأوراش والتنقلات المهنية.',
         features: [
           'نقل مكوكي للموظفين',
           'النقل نحو الأوراش',
@@ -1013,6 +899,61 @@ export const TRANSLATIONS = {
     },
   },
 } as const;
+
+// Real customer reviews, kept verbatim in their original language.
+// IMPORTANT: reviewer name and review text must NEVER be translated or
+// altered based on the active site language (FR/EN/AR) — only the section's
+// UI labels (kicker/title/subtitle/cta/showMore/showLess, from
+// TRANSLATIONS[lang].googleReviews) are localized. This list is the single
+// source of truth for review content across all languages.
+export interface GoogleReview {
+  name: string;
+  meta: string;
+  text: string;
+}
+
+export const GOOGLE_REVIEWS: GoogleReview[] = [
+  {
+    name: 'Jean Luc DARTIAILH',
+    meta: '7 avis · il y a 4 mois',
+    text: 'Excellente prestation. Aimable et ponctuel. Les véhicules sont d’excellente qualité et les prix très raisonnables. A recommander.',
+  },
+  {
+    name: 'Jérôme DUPUY',
+    meta: '4 avis · il y a 3 ans',
+    text: 'Très bonne agence de location de voitures, service au top, réactif, échanges possibles via WhatsApp. Une personne nous attend à la sortie de l’aéroport pour nous remettre la voiture et le retour se fait également à l’aéroport. Je recommande, c’est parfait.',
+  },
+  {
+    name: 'christian van puymbrouck',
+    meta: 'Local Guide · 122 avis · 146 photos · il y a 3 ans',
+    text: '2ème séjour au Maroc. J’ai de nouveau loué mon véhicule auprès de cette société. Je n’ai qu’à m’en féliciter. Attendu à ma sortie d’avion. Véhicule neuf.',
+  },
+  {
+    name: 'Driss Mahjabi',
+    meta: '3 avis · il y a 2 ans',
+    text: 'Qualité vraiment irréprochable de la prestation et veille à la satisfaction du client de la réception au retour du véhicule. Je recommande vivement.',
+  },
+  {
+    name: 'Benoit',
+    meta: '',
+    text: 'Très bonne expérience, loueur professionnel !',
+  },
+  {
+    name: 'Cyril Gouillard',
+    meta: '',
+    text: 'Location sans soucis, disponibilité, intervention rapide, facturation conforme.',
+  },
+  {
+    name: 'CARLOS RODRIGUEZ',
+    meta: '',
+    text: 'un coche nuevo en un muy buen estado con un buen precio y sobre todo un personal servicial. muy recomendable gracias senores',
+  },
+  {
+    name: 'ROBERTSON ALEX',
+    meta: '',
+    text: 'we ve been dealing with this company since we arrived to Laayoune, trustful agency with good prices/quality ratios. Recommended for foreign companies arriving for the first time to the area',
+  },
+];
 
 export function buildWhatsAppLink(
   phone: string,
@@ -1029,9 +970,9 @@ export function buildWhatsAppLink(
     if (vehicleName && locationName && startDate && endDate) {
       message = `مرحباً، أود استئجار سيارة ${vehicleName} في وكالة ${locationName} من ${startDate} إلى ${endDate}.`;
     } else if (vehicleName) {
-      message = `مرحباً، أود الاستفسار عن كراء سيارة ${vehicleName} لدى سوبيكار.`;
+      message = `مرحباً، أود الاستفسار عن كراء سيارة ${vehicleName} لدى السباعي.`;
     } else {
-      message = `مرحباً، أود الاستفسار عن كراء سيارة لدى سوبيكار.`;
+      message = `مرحباً، أود الاستفسار عن كراء سيارة لدى السباعي.`;
     }
   } else if (lang === 'en') {
     if (vehicleName && locationName && startDate && endDate) {

@@ -21,7 +21,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ currentLang }) => {
           </div>
 
           <p className="text-xs text-[#667085] pb-6 border-b border-slate-100 mb-8">
-            {isAr ? 'آخر تحديث: 2026 · سوبيكار SOUBAICAR Maroc' : 'Dernière mise à jour : 2026 · SOUBAICAR Maroc'}
+            {isAr ? 'آخر تحديث: 2026 · السباعي SOUBAICAR Maroc' : 'Dernière mise à jour : 2026 · SOUBAICAR Maroc'}
           </p>
 
           <div className="space-y-8 text-xs sm:text-sm text-[#1C2434] leading-relaxed">
@@ -31,7 +31,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ currentLang }) => {
               </h2>
               <p>
                 {isAr
-                  ? 'سوبيكار SOUBAICAR هي شركة متخصصة في كراء السيارات بالمملكة المغربية، مسجلة ومطابقة لكافة القوانين المنظمة للقطاع، وتدير وكالات رسمية في كل من العيون، بوجدور والداخلة.'
+                  ? 'السباعي SOUBAICAR هي شركة متخصصة في كراء السيارات بالمملكة المغربية، مسجلة ومطابقة لكافة القوانين المنظمة للقطاع، وتدير وكالات رسمية في كل من العيون، بوجدور والداخلة.'
                   : 'SOUBAICAR est une société de location de véhicules immatriculée au registre du commerce au Maroc, exerçant ses activités dans le strict respect de la réglementation marocaine du transport et de la location automobile, avec ses agences agréées à Laâyoune, Boujdour et Dakhla.'}
               </p>
             </section>
@@ -65,7 +65,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ currentLang }) => {
               </h2>
               <p>
                 {isAr
-                  ? 'تستفيد جميع سيارات سوبيكار من تأمين شامل لكافة المخاطر وفق بنود العقد المبرم، مع خدمة المساعدة الطرقية 24 ساعة طيلة فترة الإيجار.'
+                  ? 'تستفيد جميع سيارات السباعي من تأمين شامل لكافة المخاطر وفق بنود العقد المبرم، مع خدمة المساعدة الطرقية 24 ساعة طيلة فترة الإيجار.'
                   : 'Tous nos véhicules sont couverts par une assurance tous risques conformément aux clauses du contrat de location souscrit. Une assistance routière 24h/24 et 7j/7 est garantie sur tout le territoire marocain.'}
               </p>
             </section>
@@ -76,7 +76,7 @@ export const LegalPage: React.FC<LegalPageProps> = ({ currentLang }) => {
               </h2>
               <p>
                 {isAr
-                  ? 'تلتزم سوبيكار بالحفاظ على سرية معلوماتكم الشخصية المستخدمة حصرياً لمعالجة وتأكيد طلبات الحجز وفق المعايير القانونية.'
+                  ? 'تلتزم السباعي بالحفاظ على سرية معلوماتكم الشخصية المستخدمة حصرياً لمعالجة وتأكيد طلبات الحجز وفق المعايير القانونية.'
                   : 'Les données recueillies font l’objet d’un traitement informatique destiné à la gestion des réservations et à la relation client. Conformément à la loi 09-08, vous disposez d’un droit d’accès et de rectification de vos données.'}
               </p>
             </section>

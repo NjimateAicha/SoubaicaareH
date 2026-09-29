@@ -75,7 +75,7 @@ export const VehiclesPage: React.FC<VehiclesPageProps> = ({
         {/* Page Header */}
         <div className="mb-10 text-center max-w-2xl mx-auto">
           <span className="text-xs font-bold uppercase tracking-wider text-[#D92D3A] mb-2 block">
-            {currentLang === 'ar' ? 'أسطول سوبيكار' : 'Catalogue Officiel'}
+            {currentLang === 'ar' ? 'أسطول السباعي' : 'Catalogue Officiel'}
           </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#15265A] mb-3">
             {t.fleet.title}

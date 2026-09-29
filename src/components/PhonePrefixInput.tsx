@@ -1,33 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Phone } from 'lucide-react';
 import type { Language } from '../types/database';
+import {
+  DEFAULT_COUNTRY_ISO2,
+  getCountryByIso2,
+  getCountryName,
+  getSortedCountryPrefixes,
+} from '../lib/countryPhonePrefixes';
 
-export const DEFAULT_PHONE_PREFIX = '+212';
+export { DEFAULT_COUNTRY_ISO2 };
 
-const PREFIX_CODES = ['+212', '+33', '+34', '+32', '+31', '+44', '+1', '+966', '+971'];
-
-const COUNTRY_NAMES: Record<Language, Record<string, string>> = {
-  fr: {
-    '+212': 'Maroc', '+33': 'France', '+34': 'Espagne', '+32': 'Belgique',
-    '+31': 'Pays-Bas', '+44': 'Royaume-Uni', '+1': 'USA / Canada',
-    '+966': 'Arabie Saoudite', '+971': 'Émirats Arabes Unis',
-  },
-  en: {
-    '+212': 'Morocco', '+33': 'France', '+34': 'Spain', '+32': 'Belgium',
-    '+31': 'Netherlands', '+44': 'United Kingdom', '+1': 'USA / Canada',
-    '+966': 'Saudi Arabia', '+971': 'United Arab Emirates',
-  },
-  ar: {
-    '+212': 'المغرب', '+33': 'فرنسا', '+34': 'إسبانيا', '+32': 'بلجيكا',
-    '+31': 'هولندا', '+44': 'المملكة المتحدة', '+1': 'الولايات المتحدة / كندا',
-    '+966': 'السعودية', '+971': 'الإمارات العربية المتحدة',
-  },
-};
+// Combines the selected country's dial code with the locally-entered number,
+// e.g. getDialCode('MA') + ' ' + '612345678' -> '+212 612345678'.
+export function getDialCode(iso2: string): string {
+  return getCountryByIso2(iso2)?.code || '';
+}
 
 interface PhonePrefixInputProps {
   currentLang: Language;
-  prefix: string;
-  onPrefixChange: (value: string) => void;
+  countryIso2: string;
+  onCountryChange: (iso2: string) => void;
   number: string;
   onNumberChange: (value: string) => void;
   placeholder?: string;
@@ -36,26 +28,26 @@ interface PhonePrefixInputProps {
 
 export const PhonePrefixInput: React.FC<PhonePrefixInputProps> = ({
   currentLang,
-  prefix,
-  onPrefixChange,
+  countryIso2,
+  onCountryChange,
   number,
   onNumberChange,
   placeholder,
   required,
 }) => {
-  const names = COUNTRY_NAMES[currentLang];
+  const sortedCountries = useMemo(() => getSortedCountryPrefixes(currentLang), [currentLang]);
 
   return (
     <div className="flex gap-2">
       <select
-        value={prefix}
-        onChange={(e) => onPrefixChange(e.target.value)}
+        value={countryIso2}
+        onChange={(e) => onCountryChange(e.target.value)}
         aria-label={currentLang === 'ar' ? 'مفتاح الاتصال الدولي' : 'Indicatif téléphonique'}
-        className="shrink-0 w-[92px] bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-bold text-xs sm:text-sm rounded-xl px-2 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden cursor-pointer"
+        className="shrink-0 w-[128px] sm:w-[168px] bg-[#F6F7FA] border border-slate-200 text-[#15265A] font-bold text-xs sm:text-sm rounded-xl px-2 py-2.5 focus:ring-2 focus:ring-[#263B86] focus:outline-hidden cursor-pointer truncate"
       >
-        {PREFIX_CODES.map((code) => (
-          <option key={code} value={code}>
-            {code} {names[code]}
+        {sortedCountries.map((country) => (
+          <option key={country.iso2} value={country.iso2}>
+            {country.code} {getCountryName(country, currentLang)}
           </option>
         ))}
       </select>

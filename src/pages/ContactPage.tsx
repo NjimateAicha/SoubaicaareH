@@ -3,7 +3,7 @@ import { MapPin, Phone, Mail, MessageCircle, Send, CheckCircle2, ExternalLink, N
 import type { Language, LocationItem } from '../types/database';
 import { TRANSLATIONS, buildWhatsAppLink } from '../lib/translations';
 import { DataService } from '../lib/supabase';
-import { PhonePrefixInput, DEFAULT_PHONE_PREFIX } from '../components/PhonePrefixInput';
+import { PhonePrefixInput, DEFAULT_COUNTRY_ISO2, getDialCode } from '../components/PhonePrefixInput';
 
 interface ContactPageProps {
   currentLang: Language;
@@ -25,7 +25,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
 
   const [name, setName] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [phonePrefix, setPhonePrefix] = useState(DEFAULT_PHONE_PREFIX);
+  const [phoneCountry, setPhoneCountry] = useState(DEFAULT_COUNTRY_ISO2);
   const [userPhone, setUserPhone] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
@@ -42,7 +42,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
     try {
       await DataService.createContactMessage({
         name,
-        phone: `${phonePrefix} ${userPhone}`.trim(),
+        phone: `${getDialCode(phoneCountry)} ${userPhone}`.trim(),
         email: userEmail,
         subject,
         message,
@@ -74,7 +74,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
             {currentLang === 'ar' ? 'تواصل معنا' : 'Service Client'}
           </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#15265A] mb-4">
-            {currentLang === 'ar' ? 'اتصل بوكالة سوبيكار SOUBAICAR' : 'Contactez SOUBAICAR'}
+            {currentLang === 'ar' ? 'اتصل بوكالة السباعي SOUBAICAR' : 'Contactez SOUBAICAR'}
           </h1>
           <p className="text-sm sm:text-base text-[#667085] leading-relaxed">
             {currentLang === 'ar'
@@ -103,7 +103,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                 </h4>
                 <p className="text-xs text-emerald-700">
                   {currentLang === 'ar'
-                    ? 'شكراً لتواصلك مع سوبيكار، سنتصل بك في أقرب وقت.'
+                    ? 'شكراً لتواصلك مع السباعي، سنتصل بك في أقرب وقت.'
                     : 'Merci d’avoir contacté SOUBAICAR. Notre équipe vous recontactera rapidement.'}
                 </p>
               </div>
@@ -133,8 +133,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                     </label>
                     <PhonePrefixInput
                       currentLang={currentLang}
-                      prefix={phonePrefix}
-                      onPrefixChange={setPhonePrefix}
+                      countryIso2={phoneCountry}
+                      onCountryChange={setPhoneCountry}
                       number={userPhone}
                       onNumberChange={setUserPhone}
                       placeholder={currentLang === 'ar' ? 'مثال: 600 000 6' : 'Ex : 6XX XXX XXX'}
