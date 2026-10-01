@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import staffTransportImage from '../assets/images/staff_transport.png';
 import { QuickBookingForm } from '../components/QuickBookingForm';
 import { VehicleCard } from '../components/VehicleCard';
 import {
@@ -229,6 +230,41 @@ export const HomePage: React.FC<HomePageProps> = ({
                 onBook={(id) => onNavigate(`/${currentLang}/reserver?vehicle=${id}`)}
               />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. B2B SOLUTIONS */}
+      <section className="py-12 sm:py-14 bg-[#F6F7FA] border-y border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+          <div className="lg:col-span-7">
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 text-[#D92D3A] flex items-center justify-center shrink-0">
+                <Building2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-[#15265A] mb-3">
+                  {t.homeB2B.title}
+                </h2>
+                <p className="text-sm text-[#475467] leading-relaxed mb-2">
+                  {t.homeB2B.paragraph1}
+                </p>
+                <p className="text-sm text-[#667085] leading-relaxed">
+                  {t.homeB2B.paragraph2}
+                </p>
+                <p className="mt-4 text-xs sm:text-sm font-bold leading-relaxed text-[#15265A]">
+                  {t.homeB2B.services}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-5">
+            <img
+              src={staffTransportImage}
+              alt={currentLang === 'ar' ? 'سيارة سوبيكار للتنقل إلى مواقع العمل' : currentLang === 'en' ? 'SOUBAICAR vehicle for worksite mobility' : 'Véhicule SOUBAICAR pour la mobilité sur chantier'}
+              className="w-full aspect-[4/3] object-cover rounded-xl border border-slate-200"
+              loading="lazy"
+            />
           </div>
         </div>
       </section>

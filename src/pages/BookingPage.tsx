@@ -157,7 +157,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({
 
   return (
     <div className="min-h-screen bg-[#F6F7FA] py-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="text-xs font-bold uppercase tracking-wider text-[#D92D3A] mb-2 block">
@@ -234,7 +234,8 @@ export const BookingPage: React.FC<BookingPageProps> = ({
           </div>
         ) : (
           /* Booking Form */
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             {/* Top reassuring banner */}
             <div className="bg-[#15265A] text-white p-4 sm:px-8 flex items-center justify-center gap-2 text-xs">
               <ShieldCheck className="w-4 h-4 text-[#D92D3A]" />
@@ -486,6 +487,21 @@ export const BookingPage: React.FC<BookingPageProps> = ({
                 </a>
               </div>
             </form>
+          </div>
+          <aside className="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <h2 className="text-base font-bold text-[#15265A] mb-4 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-[#D92D3A] shrink-0" />
+              <span>{t.bookingAssurance.title}</span>
+            </h2>
+            <ul className="space-y-3">
+              {t.bookingAssurance.items.map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed text-[#344054]">
+                  <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0 text-[#D92D3A]" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </aside>
           </div>
         )}
       </div>
