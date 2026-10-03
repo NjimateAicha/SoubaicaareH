@@ -261,7 +261,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="lg:col-span-5">
             <img
               src={staffTransportImage}
-              alt={currentLang === 'ar' ? 'سيارة السباعي كار للتنقل إلى مواقع العمل' : currentLang === 'en' ? 'SOUBAICAR vehicle for worksite mobility' : 'Véhicule SOUBAICAR pour la mobilité sur chantier'}
+              alt={currentLang === 'ar' ? 'سيارة السباعي  للتنقل إلى مواقع العمل' : currentLang === 'en' ? 'SOUBAICAR vehicle for worksite mobility' : 'Véhicule SOUBAICAR pour la mobilité sur chantier'}
               className="w-full aspect-[4/3] object-cover rounded-xl border border-slate-200"
               loading="lazy"
             />
