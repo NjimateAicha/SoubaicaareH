@@ -62,13 +62,13 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             <div className="lg:col-span-6 relative aspect-16/10 lg:aspect-auto min-h-[360px]">
               <img
                 src={ASSET_IMAGES.hero}
-                alt={currentLang === 'ar' ? 'أسطول سوبيكار في المغرب' : 'SOUBAICAR Fleet Morocco'}
+                alt={currentLang === 'ar' ? 'أسطول السباعي كار في المغرب' : 'SOUBAICAR Fleet Morocco'}
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#15265A]/80 via-transparent to-transparent" />
               <div className="absolute bottom-6 inset-x-6 text-white">
-                <span className="text-xl font-bold block">{currentLang === 'ar' ? 'سوبيكار' : 'SOUBAICAR'}</span>
+                <span className="text-xl font-bold block">{currentLang === 'ar' ? 'السباعي كار' : 'SOUBAICAR'}</span>
                 <span className="text-xs text-slate-300">Laâyoune · Boujdour · Dakhla</span>
               </div>
             </div>
