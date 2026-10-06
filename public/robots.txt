@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /loginadmin
+
+Sitemap: https://www.soubaicar.com/sitemap.xml

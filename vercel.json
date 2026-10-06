@@ -1,7 +1,37 @@
 {
+  "redirects": [
+    { "source": "/", "destination": "/fr", "permanent": true },
+
+    { "source": "/:lang(fr|en|ar)/vehicles", "destination": "/:lang/vehicules", "permanent": true },
+    { "source": "/:lang(fr|en|ar)/vehicles/:slug", "destination": "/:lang/vehicules/:slug", "permanent": true },
+    { "source": "/:lang(fr|en|ar)/about", "destination": "/:lang/a-propos", "permanent": true },
+    { "source": "/:lang(fr|en|ar)/booking", "destination": "/:lang/reserver", "permanent": true },
+    { "source": "/:lang(fr|en|ar)/legal", "destination": "/:lang/mentions-legales", "permanent": true },
+    { "source": "/fr/staff-transportation", "destination": "/fr/transport-du-personnel", "permanent": true },
+    { "source": "/:lang(en|ar)/transport-du-personnel", "destination": "/:lang/staff-transportation", "permanent": true },
+
+    { "source": "/vehicules", "destination": "/fr/vehicules", "permanent": true },
+    { "source": "/vehicules/:slug", "destination": "/fr/vehicules/:slug", "permanent": true },
+    { "source": "/vehicles", "destination": "/fr/vehicules", "permanent": true },
+    { "source": "/vehicles/:slug", "destination": "/fr/vehicules/:slug", "permanent": true },
+    { "source": "/agences", "destination": "/fr/agences", "permanent": true },
+    { "source": "/agences/:slug", "destination": "/fr/agences/:slug", "permanent": true },
+    { "source": "/location-voiture-laayoune", "destination": "/fr/location-voiture-laayoune", "permanent": true },
+    { "source": "/location-voiture-boujdour", "destination": "/fr/location-voiture-boujdour", "permanent": true },
+    { "source": "/location-voiture-dakhla", "destination": "/fr/location-voiture-dakhla", "permanent": true },
+    { "source": "/transport-du-personnel", "destination": "/fr/transport-du-personnel", "permanent": true },
+    { "source": "/staff-transportation", "destination": "/fr/transport-du-personnel", "permanent": true },
+    { "source": "/a-propos", "destination": "/fr/a-propos", "permanent": true },
+    { "source": "/about", "destination": "/fr/a-propos", "permanent": true },
+    { "source": "/reserver", "destination": "/fr/reserver", "permanent": true },
+    { "source": "/booking", "destination": "/fr/reserver", "permanent": true },
+    { "source": "/contact", "destination": "/fr/contact", "permanent": true },
+    { "source": "/mentions-legales", "destination": "/fr/mentions-legales", "permanent": true },
+    { "source": "/legal", "destination": "/fr/mentions-legales", "permanent": true }
+  ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!sitemap\\.xml$|robots\\.txt$).*)",
       "destination": "/index.html"
     }
   ]

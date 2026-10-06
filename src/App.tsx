@@ -12,6 +12,8 @@ import { ContactPage } from './pages/ContactPage';
 import { LegalPage } from './pages/LegalPage';
 import { LocalSeoPage } from './pages/LocalSeoPage';
 import { StaffTransportPage } from './pages/StaffTransportPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { getCanonicalPath, resolvePublicRoute, getSeoLinks, applySeoHead } from './lib/seoRoutes';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 import { MessageCircle, Phone } from 'lucide-react';
@@ -157,16 +159,23 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  // Ensure default route is /fr if accessed at /
-  useEffect(() => {
-    if (currentPath === '/' || currentPath === '') {
-      handleNavigate('/fr');
-    }
-  }, [currentPath]);
-
   // Parse path and query parameters
   const [pathname, searchStr] = currentPath.split('?');
   const searchParams = new URLSearchParams(searchStr || '');
+
+  // Client-side fallback for the Vercel redirects: rewrite "/", unprefixed paths,
+  // aliases (/en/vehicles, ...) and trailing slashes to their canonical URL.
+  useEffect(() => {
+    const canonical = getCanonicalPath(pathname);
+    if (canonical && canonical !== pathname) {
+      const next = canonical + (searchStr ? `?${searchStr}` : '');
+      window.history.replaceState({}, '', next);
+      setCurrentPath(next);
+      const match = canonical.match(/^\/(fr|en|ar)(\/|$)/);
+      if (match) setCurrentLang(match[1] as Language);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPath]);
 
   // Check if Admin Route (discreet: never linked in public navigation)
   const isAdminRoute = pathname.startsWith('/admin');
@@ -183,6 +192,27 @@ export default function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authChecked, session, pathname]);
+
+  // Known public route? (unknown paths and missing vehicle/agency slugs are 404s)
+  const publicRoute = isAdminRoute || isLoginAdminRoute ? null : resolvePublicRoute(pathname);
+  const [routeSeg, routeSlug] = publicRoute?.segments ?? [];
+  const detailMissing =
+    !!routeSlug &&
+    ((routeSeg === 'vehicules' && vehiclesStatus === 'loaded' && !vehicles.some((v) => v.slug === routeSlug)) ||
+      (routeSeg === 'agences' && !locationsLoading && !locations.some((l) => l.slug === routeSlug)));
+  const isNotFound = !isAdminRoute && !isLoginAdminRoute && (!publicRoute || detailMissing);
+
+  // Canonical + hreflang (+ noindex on 404) in <head>
+  useEffect(() => {
+    if (isAdminRoute || isLoginAdminRoute) {
+      applySeoHead(null, false);
+    } else if (isNotFound || !publicRoute) {
+      applySeoHead(null, true);
+    } else {
+      applySeoHead(getSeoLinks(publicRoute), false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, isNotFound]);
 
   // Floating WhatsApp action
   const floatingWhatsappHref = buildWhatsAppLink(
@@ -300,6 +330,11 @@ export default function App() {
       );
     }
 
+    // 404: unknown path or unknown vehicle/agency slug
+    if (isNotFound) {
+      return <NotFoundPage currentLang={currentLang} onNavigate={handleNavigate} />;
+    }
+
     // Strip language prefix for easier pattern matching
     const cleanPath = pathname.replace(/^\/(fr|en|ar)/, '') || '/';
 
@@ -361,6 +396,9 @@ export default function App() {
     // 4. Agency Detail: /agences/:slug
     const agencyDetailMatch = cleanPath.match(/^\/agences\/([^/]+)/);
     if (agencyDetailMatch) {
+      if (locationsLoading) {
+        return renderVehicleLoadingState('Chargement de l\'agence...');
+      }
       const slug = agencyDetailMatch[1];
       const loc = locations.find((l) => l.slug === slug);
       if (loc) {
