@@ -435,12 +435,13 @@ export const DataService = {
         created_at: new Date().toISOString(),
       } as ContactMessage;
 
-      const { data, error } = await supabase.from('contact_messages').insert(payload).select().single();
+      // Plain insert: anon has INSERT but no SELECT on contact_messages, so never chain .select()
+      const { error } = await supabase.from('contact_messages').insert(payload);
       if (error) {
-        console.error('Supabase contact insert failed:', error);
+        console.error('CONTACT_MESSAGE_INSERT_ERROR', error);
         throw error;
       }
-      return (data ?? payload) as ContactMessage;
+      return payload;
     }
 
     const list = await this.getContactMessages();
