@@ -23,6 +23,20 @@ const STORAGE_KEYS = {
   adminAuth: 'soubaicar_admin_auth_v1',
 };
 
+// Best-effort email notification to the business after a record is saved.
+// Failures are only logged and never surface to the customer.
+async function notifyByEmail(type: 'contact' | 'corporate', record: unknown): Promise<void> {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase.functions.invoke('send-notification-email', {
+      body: { type, record },
+    });
+    if (error) console.error('NOTIFICATION_EMAIL_ERROR', error);
+  } catch (error) {
+    console.error('NOTIFICATION_EMAIL_ERROR', error);
+  }
+}
+
 function generateRecordId(prefix: string): string {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
     return crypto.randomUUID();
@@ -377,12 +391,14 @@ export const DataService = {
         created_at: new Date().toISOString(),
       } as CorporateQuoteRequest;
 
-      const { data, error } = await supabase.from('corporate_quote_requests').insert(payload).select().single();
+      // Plain insert: anon has INSERT but no SELECT on corporate_quote_requests, so never chain .select()
+      const { error } = await supabase.from('corporate_quote_requests').insert(payload);
       if (error) {
         console.error('Supabase corporate quote insert failed:', error);
         throw error;
       }
-      return (data ?? payload) as CorporateQuoteRequest;
+      await notifyByEmail('corporate', payload);
+      return payload;
     }
 
     const list = await this.getCorporateQuoteRequests();
@@ -441,6 +457,7 @@ export const DataService = {
         console.error('CONTACT_MESSAGE_INSERT_ERROR', error);
         throw error;
       }
+      await notifyByEmail('contact', payload);
       return payload;
     }
 
